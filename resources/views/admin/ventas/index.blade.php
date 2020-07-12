@@ -195,11 +195,15 @@
                         <div class="input-group input-group">
                             <input class="form-control" type="text" name="cedula" placeholder="Buscar Cedula" data-inputmask='"mask": "A-99999999"' data-mask required>
                             <div class="input-group-append">
-                                <button class="btn btn-default" type="submit">
+                                <button class="btn btn-default button25" type="submit">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
                         </div>
+                    <div id="content25" class="col-lg-12">
+                        {{-- Contenido inicial...
+                         <img src="{{ asset('img/loader.gif') }}"/>--}}
+                    </div>
                     {!! Form::close() !!}
                     <!-- SEARCH FORM -->
                     {{--<legend></legend>
@@ -236,6 +240,14 @@
         });
 
     </script>--}}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.button25').on('click', function(){
+                //Añadimos la imagen de carga en el contenedor
+                $('#content25').html('<div><br/>Un momento, por favor...</div>');
+            });
+        });
+    </script>
     <script>
         $('[data-mask]').inputmask()
     </script>

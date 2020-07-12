@@ -10,6 +10,7 @@ use App\Exports\VentasExport;
 use App\Http\Requests\PedidosRequest;
 use App\Http\Requests\VentasRequest;
 use App\Llamada;
+use App\Registro;
 use App\Venta;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -216,6 +217,8 @@ class VentasController extends Controller
 
     public function create_cedula(Request $request)
     {
+        $cne = null;
+        $nombre = null;
         $datos = Datos_personal::where('cedula', '=', $request->cedula)->first();
         if (!$datos){
 
@@ -235,8 +238,18 @@ class VentasController extends Controller
                     ->with('datos', $datos2);
             }
 
+            //CNE
+            if(config('app.registro_civil')) {
+                $cne = Registro::where( 'cedula', '=', $explode[1] )->first();
+                if ( $cne ) {
+                    flash( 'Información del CNE', 'info' )->important();
+                    $nombre = $cne->primer_nombre . ' ' . $cne->segundo_nombre . ' ' . $cne->primer_apellido . ' ' . $cne->segundo_apellido;
+                }
+            }
             return view('admin.ventas.create_cedula')
-                ->with('cedula', $cedula);
+                ->with('cedula', $cedula)
+                ->with('cne', $cne)
+                ->with('nombre', $nombre);
         }else{
 
             $compra = Venta::where('datos_id', '=', $datos->id)->where('fecha', date('Y-m-d'))->first();

@@ -27,16 +27,29 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="form-group">
-                                <label>Cedula</label>
-                                {!! Form::text('cedula', $cedula, ['class' => 'form-control', 'placeholder' => 'V-12345678',
-                                                'data-inputmask' => '"mask": "A-99999999"', 'data-mask', 'required']) !!}
-                            </div>
-                            <div class="form-group">
-                                <label>Nombre Completo</label>
-                                {!! Form::text('nombre_completo', null, ['class' => 'form-control', 'placeholder' => 'Nombre Completo',
-                                                'required']) !!}
-                            </div>
+                            @if($cne)
+                                <div class="form-group">
+                                    <label>Cedula</label>
+                                    {!! Form::text('cedula', $cedula, ['class' => 'form-control', 'placeholder' => 'V-12345678',
+                                                    'data-inputmask' => '"mask": "A-99999999"', 'data-mask', 'readonly']) !!}
+                                </div>
+                                <div class="form-group">
+                                    <label>Nombre Completo</label>
+                                    {!! Form::text('nombre_completo', $nombre, ['class' => 'form-control', 'placeholder' => 'Nombre Completo',
+                                                    'readonly']) !!}
+                                </div>
+                            @else
+                                <div class="form-group">
+                                    <label>Cedula</label>
+                                    {!! Form::text('cedula', $cedula, ['class' => 'form-control', 'placeholder' => 'V-12345678',
+                                                    'data-inputmask' => '"mask": "A-99999999"', 'data-mask', 'required']) !!}
+                                </div>
+                                <div class="form-group">
+                                    <label>Nombre Completo</label>
+                                    {!! Form::text('nombre_completo', null, ['class' => 'form-control', 'placeholder' => 'Nombre Completo',
+                                                    'required']) !!}
+                                </div>
+                            @endif
                             <div class="form-group">
                                 <label>Telefono</label>
                                 <div class="input-group">

@@ -8,6 +8,7 @@ use App\Exports\ComprasExport;
 use App\Exports\PedidosExport;
 use App\Http\Requests\PedidosRequest;
 use App\Llamada;
+use App\Registro;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -192,6 +193,8 @@ class PedidosController extends Controller
 
     public function create_cedula(Request $request)
     {
+        $cne = null;
+        $nombre = null;
         $datos = Datos_personal::where('cedula', '=', $request->cedula)->first();
         if (!$datos){
 
@@ -213,8 +216,18 @@ class PedidosController extends Controller
                 }
             }
 
+            //CNE
+            if(config('app.registro_civil')) {
+                $cne = Registro::where( 'cedula', '=', $explode[1] )->first();
+                if ( $cne ) {
+                    flash( 'Información del CNE', 'info' )->important();
+                    $nombre = $cne->primer_nombre . ' ' . $cne->segundo_nombre . ' ' . $cne->primer_apellido . ' ' . $cne->segundo_apellido;
+                }
+            }
             return view('admin.pedidos.create_cedula')
-                ->with('cedula', $cedula);
+                ->with('cedula', $cedula)
+                ->with('cne', $cne)
+                ->with('nombre', $nombre);
 
         }else{
 

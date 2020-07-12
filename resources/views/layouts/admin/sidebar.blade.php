@@ -75,6 +75,17 @@
                     </p>
                 </a>
             </li>
+            @if(config('app.cne'))
+            <li class="nav-item">
+                <a href="{{ route('cne.index') }}" class="nav-link @yield('cne')" target="_blank">
+                    <i class="nav-icon fas fa-chart-pie text-lightblue"></i>
+                    <p class="text-lightblue">
+                        Registro CNE
+                        {{--<span class="right badge badge-danger">08</span>--}}
+                    </p>
+                </a>
+            </li>
+            @endif
             {{--<li class="nav-header">MULTI LEVEL EXAMPLE</li>--}}
             {{--<li class="nav-item">
                 <a href="#" class="nav-link">

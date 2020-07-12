@@ -233,5 +233,7 @@ return [
     'municipio' => env('APP_MUNICIPIO', 'ROSCIO'),
     'pagina_web' => env('APP_PAGINA_WEB', false),
     'arma_tu_combo' => env('APP_ARMA_TU_COMBO', false),
+    'cne' => env('APP_CNE', false),
+    'registro_civil' => env('APP_REGISTRO_CIVIL', false),
 
 ];
