@@ -25,6 +25,15 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
+                        <a href="{{ route('productos.index') }}" class="nav-link @yield('productos')">
+                            <i class="nav-icon fas fa-tag text-primary"></i>
+                            <p class="text-primary">
+                                Productos
+                                {{--<span class="right badge badge-danger">08</span>--}}
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('usuarios.index') }}" class="nav-link @yield('usuarios')">
                             <i class="nav-icon fas fa-users text-primary"></i>
                             <p class="text-primary">
@@ -86,6 +95,7 @@
                 </a>
             </li>
             @endif
+
             {{--<li class="nav-header">MULTI LEVEL EXAMPLE</li>--}}
             {{--<li class="nav-item">
                 <a href="#" class="nav-link">

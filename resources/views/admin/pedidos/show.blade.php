@@ -128,6 +128,7 @@
 
         </div>
 
+
         <div class="col-md-3">
 
 
@@ -183,7 +184,59 @@
 
 
     </div>
+    @if(!$rubros->isEmpty() && config('app.arma_tu_combo'))
+        <div class="row justify-content-center">
 
+        <div class="col-md-7">
+
+            <div class="card card-widget widget-user-2">
+                <div class="card-body p-0">
+
+                    <table class="table table-hover table-valign-middle table-sm table-bordered table-responsive-sm">
+                        <thead class="thead-dark">
+                        <tr class="text-center">
+                            <th>Cant.</th>
+                            <th>Descripcion</th>
+                            <th>Precio</th>
+                            <th>Neto</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @php($total = 0)
+                        @foreach($rubros as $rubro)
+                            @php($total = $total + ($rubro->cantidad * $rubro->precio))
+                            <tr class="text-center table-primary text-sm">
+                                <td class="text-center">
+                                    <span class="text-bold">{{ $rubro->cantidad }}</span>
+                                </td>
+                                <td class="text-left">{{ $rubro->nombre }}</td>
+                                <td class="text-right">{{ number_format($rubro->precio, 2, ',', '.') }}</td>
+                                <td class="text-bold text-right">{{ number_format($rubro->neto, 2, ',', '.') }}</td>
+                            </tr>
+                        @endforeach
+                        @php($bolsa = $compra->capture - $total)
+                        <tr class="text-center table-primary text-sm">
+                            <td colspan="2" rowspan="2" class="text-right text-bold bg-light"></td>
+                            <td class="text-center text-bold">Bolsas Plástica</td>
+                            <td class="text-bold text-right">{{ number_format($bolsa, 2, ',', '.') }}</td>
+                        </tr>
+                        <tr class="text-center table-primary text-sm">
+                            {{--<td colspan="2" class="text-right text-bold bg-light"></td>
+                            --}}<td class="text-center text-bold bg-dark">Total</td>
+                            <td class="text-bold text-right bg-dark">{{ number_format($compra->capture, 2, ',', '.') }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+    @endif
 @endsection
 
 @section('script')

@@ -18,5 +18,9 @@ class Compra extends Model
         return $this->belongsTo('App\Datos_personal');
     }
 
+    public function carrito(){
+        return $this->hasMany('App\Carrito');
+    }
+
 
 }

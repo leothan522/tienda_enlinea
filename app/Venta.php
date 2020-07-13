@@ -17,4 +17,8 @@ class Venta extends Model
     public function datos(){
         return $this->belongsTo('App\Datos_personal');
     }
+
+    public function carrito(){
+        return $this->hasMany('App\Carrito');
+    }
 }

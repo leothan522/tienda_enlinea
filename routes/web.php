@@ -86,3 +86,6 @@ Route::resource('clientes', 'ClientesController')->middleware('auth');
 // rutas CNE
 Route::get('/cne', 'CNEController@index')->name('cne.index');
 Route::post('/cne', 'CNEController@buscar')->name('cne.show');
+
+// rutas Productos
+Route::resource('productos', 'ProductosController')->middleware('auth');

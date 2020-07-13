@@ -118,8 +118,8 @@
                     <!-- /.card -->
 				</div>
 
-                    @if(config('app.arma_tu_combo'))
-				<div class="col-md-3">
+            @if(config('app.arma_tu_combo'))
+				<div class="col-md-4">
                     <div class="card card-success">
                         <div class="card-header">
                             <h3 class="card-title">Arma tu Combo</h3>
@@ -131,30 +131,63 @@
                         </div>
                         <div class="card-body">
 
-                                <div class="input-group">
+                                {{--<div class="input-group">
                                     <label class="col-md-12">Cant.</label>
                                     {!! Form::number('modulo_3', null, ['class' => 'form-control', 'placeholder' => 'Cantidad',
                                                         'min' => 1, 'pattern' => "^[0-9]+"]) !!}
                                 </div>
-                                <br>
-                                <div class="input-group">
-                                    <label class="col-md-12">Cant. de Rubros</label>
-                                    {!! Form::number('modulo_4', null, ['class' => 'form-control', 'placeholder' => 'cantidad',
-                                                        'min' => 1, 'pattern' => "^[0-9]+"]) !!}
-                                </div>
-                                <br>
+                                <br>--}}
+                                {{--<div class="input-group">
+                                   <label class="col-md-12">Cant. de Rubros</label>
+                                   {!! Form::number('modulo_4', null, ['class' => 'form-control', 'placeholder' => 'cantidad',
+                                                       'min' => 1, 'pattern' => "^[0-9]+"]) !!}
+                               </div>
+                               <br>--}}
+                                {{--<br>
                                 <div class="input-group">
                                     <label class="col-md-12">Monto Total</label>
                                     {!! Form::number('capture', null, ['class' => 'form-control', 'placeholder' => 'Cantidad',
                                                     'min' => 1, 'pattern' => "^[0-9]+", 'step' => 'any']) !!}
+                                </div>--}}
+
+                            <div class="col-lg-12">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Cantidad Arma tu combo
+                                        </span>
+                                    </div>
+                                    {!! Form::number('modulo_3', null, ['class' => 'form-control', 'placeholder' => 'Cant.',
+                                                    'min' => 1, 'pattern' => "^[0-9]+"]) !!}
                                 </div>
+                                <!-- /input-group -->
+                            </div>
+                            <br>
+                                <div class="input-group">
+                                    <label class="col-md-12">Rubros</label>
+                                    <div class="field_wrapper">
+
+                                        <div class="input-group justify-content-center">
+
+                                            {!! Form::select('productos[]', $productos, null,
+                                                        ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione']) !!}
+                                            <span class="col-md-1"></span>
+                                            {!! Form::number('cant[]', null, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
+                                                            'min' => 1, 'max' => 2, 'pattern' => "^[0-9]+"]) !!}
+                                            <a href="javascript:void(0);" class="add_button" title="Add field"><i class="fas fa-plus"></i></a>
+                                            <a href="javascript:void(0);" class="add_button" title="Add field"></a>
+
+                                        </div>
+                                    </div>
+                                </div>
+
 
                         </div>
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
 				</div>
-                    @endif
+            @endif
 
 
 
@@ -177,6 +210,31 @@
 
 
 
+            {{--<div class="field_wrapper">
+                --}}{{--<div>
+                    {!! Form::number('field_name[]', null, ['class' => 'form-control', 'placeholder' => 'cantidad',
+                                                        'min' => 1, 'pattern' => "^[0-9]+"]) !!}
+                    --}}{{----}}{{--<input type="number" name="field_name[]" class="form-control" min="1" pattern="^[0-9]+" value=""/>--}}{{----}}{{--
+                    <a href="javascript:void(0);" class="add_button" title="Add field"><i class="fas fa-plus"></i></a>
+                    <a href="javascript:void(0);" class="add_button" title="Add field"></a>
+                </div>--}}{{--
+                <div class="input-group">
+
+                    --}}{{--<label class="col-md-12">Rubros</label>--}}{{--
+
+                        {!! Form::select('producto[]', ['Miembro' => 'Miembro', 'Administrador' => 'Administrador'], null,
+                                    ['class' => 'form-control col-md-7', 'placeholder' => 'Seleccione']) !!}
+
+
+                        {!! Form::number('cant[]', null, ['class' => 'form-control col-md-4', 'placeholder' => 'Cant.',
+                                        'min' => 1, 'pattern' => "^[0-9]+"]) !!}
+                    <a href="javascript:void(0);" class="add_button" title="Add field"><i class="fas fa-plus"></i></a>
+                    <a href="javascript:void(0);" class="add_button" title="Add field"></a>
+
+
+                </div>
+            </div>--}}
+
 
         </div>
     </div>
@@ -184,6 +242,43 @@
 
 @section('script')
     <script>
+
+        $(document).ready(function(){
+            var maxField = 10; //Input fields increment limitation
+            var addButton = $('.add_button'); //Add button selector
+            var wrapper = $('.field_wrapper'); //Input field wrapper
+            var fieldHTML = '<div class="input-group justify-content-center">' +
+                            '<?php echo (Form::select('productos[]', $productos, null,
+	                            ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione', 'required']))?>' +
+                            '<span class="col-md-1"></span>' +
+                            '<?php echo(Form::number('cant[]', null, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
+                                                                        'min' => 1, 'pattern' => "^[0-9]+", 'required'])) ?>' +
+                                '<a href="javascript:void(0);" class="remove_button text-danger" title="Remove field">' +
+                '               <i class="far fa-trash-alt"></i></a>' +
+                '           </div>'; //New input field html
+            var x = 1; //Initial field counter is 1
+            $(addButton).click(function(){ //Once add button is clicked
+                if(x < maxField){ //Check maximum number of input fields
+                    x++; //Increment field counter
+                    $(wrapper).append(fieldHTML); // Add field html
+                    $(".chosen-categoria").chosen({
+                        no_results_text: "Sin Resultados para "
+                    });
+                }
+            });
+            $(wrapper).on('click', '.remove_button', function(e){ //Once remove button is clicked
+                e.preventDefault();
+                $(this).parent('div').remove(); //Remove field html
+                x--; //Decrement field counter
+            });
+        });
+
+        $(".chosen-categoria").chosen({
+            no_results_text: "Sin Resultados para "
+        });
+
+
+
         $('[data-mask]').inputmask()
     </script>
 @endsection

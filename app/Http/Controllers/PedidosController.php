@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Carrito;
 use App\Compra;
 use App\Datos_personal;
 use App\Exports\ComprasExport;
 use App\Exports\PedidosExport;
 use App\Http\Requests\PedidosRequest;
 use App\Llamada;
+use App\Producto;
 use App\Registro;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -53,6 +55,12 @@ class PedidosController extends Controller
      */
     public function store(Request $request)
     {
+        $cantidad = null;
+        $monto = null;
+        $total = null;
+        $contador = null;
+        //dd(count($request->productos));
+        //dd($request->all());
         $datos = Datos_personal::where('cedula', '=', $request->cedula)->first();
         if($datos){
             flash('<em>La Cedula <strong><a href="javascript:history.back()">'.$request->cedula.'</a></strong> ya esta registrada</em><br>
@@ -86,7 +94,36 @@ class PedidosController extends Controller
         $pedido->responsable = strtoupper($request->responsable);
         $pedido->save();
 
-        flash('<em>Pedido Guardado para </em> <strong><a href="'.route('pedidos.edit', $pedido->id).'"><i class="fas fa-user"></i> 
+        if ($request->modulo_3 != null) {
+
+            $contador = count( $request->productos );
+
+            for ( $i = 0; $i < $contador; $i ++ ) {
+
+                $cantidad = $cantidad + $request->cant[ $i ];
+                $producto = Producto::find($request->productos[ $i ]);
+                $neto = $request->cant[$i] * $producto->precio;
+                $monto = $monto + $neto;
+
+                $carrito               = new Carrito();
+                $carrito->compras_id   = $pedido->id;
+                $carrito->productos_id = $request->productos[ $i ];
+                $carrito->cantidad     = $request->cant[ $i ];
+                $carrito->precio     = $producto->precio;
+                $carrito->save();
+            }
+
+            $bolsa = config('app.bolsa');
+            $combo = $request->modulo_3;
+            $total = ($combo * $monto) + $bolsa;
+
+            $pedido = Compra::find($pedido->id);
+            $pedido->modulo_4 = $cantidad;
+            $pedido->capture = $total;
+            $pedido->update();
+        }
+
+        flash('<em>Pedido Guardado para </em> <strong><a href="'.route('pedidos.show', $pedido->id).'"><i class="fas fa-user"></i> 
                 '.$datos->nombre_completo.' </strong></a>', 'success')->important();
         return redirect()->route('pedidos.index');
     }
@@ -99,11 +136,23 @@ class PedidosController extends Controller
      */
     public function show($id)
     {
+        $carrito = null;
+        $total = null;
         $carbon = new Carbon();
         $compra = Compra::find($id);
+        $carrito = Carrito::where('compras_id', '=', $id)->get();
+        if ($carrito) {
+            $carrito->each( function ( $carrito ) {
+                $producto        = Producto::find( $carrito->productos_id );
+                $carrito->nombre = $producto->nombre;
+                $carrito->neto   = $carrito->cantidad * $carrito->precio;
+            } );
+        }
+
         return view('admin.pedidos.show')
             ->with('carbon', $carbon)
-            ->with('compra', $compra);
+            ->with('compra', $compra)
+            ->with('rubros', $carrito);
     }
 
     /**
@@ -114,8 +163,13 @@ class PedidosController extends Controller
      */
     public function edit($id)
     {
+        $productos = Producto::where('band', '=', 'activo')->orderBy('nombre', 'ASC')->pluck('nombre', 'id');
         $compra = Compra::find($id);
-        return view('admin.pedidos.edit')->with('compra', $compra);
+        $carrito = Carrito::where('compras_id', '=', $id)->get();
+        return view('admin.pedidos.edit')
+            ->with('compra', $compra)
+            ->with('productos', $productos)
+            ->with('rubros', $carrito);
     }
 
     /**
@@ -127,6 +181,11 @@ class PedidosController extends Controller
      */
     public function update(PedidosRequest $request, $id)
     {
+        $cantidad = null;
+        $monto = null;
+        $total = null;
+        $contador = null;
+
         $datos = Datos_personal::find($request->datos_id);
 
         if ($request->cedula){
@@ -171,6 +230,43 @@ class PedidosController extends Controller
         }
         $pedido->update();
 
+        if ($request->cedula) {
+
+            $rubros = Carrito::where('compras_id', '=', $pedido->id)->get();
+            foreach ($rubros as $rubro){
+                $carrito = Carrito::find($rubro->id);
+                $carrito->delete();
+            }
+
+            if ($request->modulo_3 != null) {
+
+                $contador = count( $request->productos );
+
+                for ( $i = 0; $i < $contador; $i ++ ) {
+                    $cantidad = $cantidad + $request->cant[ $i ];
+                    $producto = Producto::find( $request->productos[ $i ] );
+                    $neto     = $request->cant[ $i ] * $producto->precio;
+                    $monto    = $monto + $neto;
+
+                    $carrito               = new Carrito();
+                    $carrito->compras_id   = $pedido->id;
+                    $carrito->productos_id = $request->productos[ $i ];
+                    $carrito->cantidad     = $request->cant[ $i ];
+                    $carrito->precio       = $producto->precio;
+                    $carrito->save();
+                }
+
+                $bolsa = config( 'app.bolsa' );
+                $combo = $request->modulo_3;
+                $total = ( $combo * $monto ) + $bolsa;
+
+                $pedido           = Compra::find( $pedido->id );
+                $pedido->modulo_4 = $cantidad;
+                $pedido->capture  = $total;
+                $pedido->update();
+            }
+        }
+
         flash('<em>Pedido Modificado para </em> <strong><a href="'.route('pedidos.show', $pedido->id).'"><i class="fas fa-user"></i> 
                 '.$datos->nombre_completo.' </strong></a>', 'primary')->important();
         return redirect()->route('pedidos.index');
@@ -187,7 +283,7 @@ class PedidosController extends Controller
         $compra = Compra::find($id);
         $compra->delete();
 
-        flash('<em>Pedido Eliminado para </em>', 'danger')->important();
+        flash('<em>Pedido Eliminado </em>', 'danger')->important();
         return redirect()->route('pedidos.index');
     }
 
@@ -195,6 +291,8 @@ class PedidosController extends Controller
     {
         $cne = null;
         $nombre = null;
+        $productos = Producto::where('band', '=', 'activo')->orderBy('nombre', 'ASC')->pluck('nombre', 'id');
+
         $datos = Datos_personal::where('cedula', '=', $request->cedula)->first();
         if (!$datos){
 
@@ -212,7 +310,8 @@ class PedidosController extends Controller
                     return redirect()->route('pedidos.index');
                 }else{
                     return view('admin.pedidos.edit_cedula')
-                        ->with('datos', $datos2);
+                        ->with('datos', $datos2)
+                        ->with('productos', $productos);
                 }
             }
 
@@ -224,10 +323,14 @@ class PedidosController extends Controller
                     $nombre = $cne->primer_nombre . ' ' . $cne->segundo_nombre . ' ' . $cne->primer_apellido . ' ' . $cne->segundo_apellido;
                 }
             }
+
+
+
             return view('admin.pedidos.create_cedula')
                 ->with('cedula', $cedula)
                 ->with('cne', $cne)
-                ->with('nombre', $nombre);
+                ->with('nombre', $nombre)
+                ->with('productos', $productos);
 
         }else{
 
@@ -238,7 +341,8 @@ class PedidosController extends Controller
                 return redirect()->route('pedidos.index');
             }else{
                 return view('admin.pedidos.edit_cedula')
-                    ->with('datos', $datos);
+                    ->with('datos', $datos)
+                    ->with('productos', $productos);
             }
 
         }
@@ -246,6 +350,11 @@ class PedidosController extends Controller
 
     public function update_cedula(Request $request, $id)
     {
+        $cantidad = null;
+        $monto = null;
+        $total = null;
+        $contador = null;
+
         $datos = Datos_personal::find($id);
 
         $explode = explode('-', $request->cedula);
@@ -278,7 +387,36 @@ class PedidosController extends Controller
         $pedido->responsable = strtoupper($request->responsable);
         $pedido->save();
 
-        flash('<em>Pedido Guardado para </em> <strong><a href="'.route('pedidos.edit', $pedido->id).'"><i class="fas fa-user"></i> 
+        if ($request->modulo_3 != null) {
+
+            $contador = count( $request->productos );
+
+            for ( $i = 0; $i < $contador; $i ++ ) {
+
+                $cantidad = $cantidad + $request->cant[ $i ];
+                $producto = Producto::find($request->productos[ $i ]);
+                $neto = $request->cant[$i] * $producto->precio;
+                $monto = $monto + $neto;
+
+                $carrito               = new Carrito();
+                $carrito->compras_id   = $pedido->id;
+                $carrito->productos_id = $request->productos[ $i ];
+                $carrito->cantidad     = $request->cant[ $i ];
+                $carrito->precio     = $producto->precio;
+                $carrito->save();
+            }
+
+            $bolsa = config('app.bolsa');
+            $combo = $request->modulo_3;
+            $total = ($combo * $monto) + $bolsa;
+
+            $pedido = Compra::find($pedido->id);
+            $pedido->modulo_4 = $cantidad;
+            $pedido->capture = $total;
+            $pedido->update();
+        }
+
+        flash('<em>Pedido Guardado para </em> <strong><a href="'.route('pedidos.show', $pedido->id).'"><i class="fas fa-user"></i> 
                 '.$datos->nombre_completo.' </strong></a>', 'success')->important();
         return redirect()->route('pedidos.index');
     }
