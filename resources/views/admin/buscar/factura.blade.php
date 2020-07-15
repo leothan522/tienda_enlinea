@@ -5,9 +5,9 @@
 
 @section('buscar')
     <!-- SEARCH FORM -->
-    {!! Form::open(['route' => 'ventas.buscar.cedula', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
+    {!! Form::open(['route' => 'buscar.cedula', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
     <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="text" name="buscar" placeholder="Buscar Cedula" aria-label="Buscar" data-inputmask='"mask": "A-99999999"' data-mask required>
+        <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Cedula" aria-label="Buscar" data-inputmask='"mask": "A-99999999"' data-mask required>
         <div class="input-group-append">
             <button class="btn btn-navbar" type="submit">
                 <i class="fas fa-search"></i>
@@ -18,7 +18,7 @@
     <!-- SEARCH FORM -->
     {!! Form::open(['route' => 'ventas.buscar.factura', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
     <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="text" name="buscar" placeholder="Buscar Factura" aria-label="Buscar" data-inputmask='"mask": "99999"' data-mask required>
+        <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Factura" aria-label="Buscar" data-inputmask='"mask": "99999"' data-mask required>
         <div class="input-group-append">
             <button class="btn btn-navbar" type="submit">
                 <i class="fas fa-search"></i>
@@ -29,7 +29,7 @@
     <!-- SEARCH FORM -->
     {!! Form::open(['route' => 'ventas.buscar.referencia', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
     <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="text" name="buscar" placeholder="Buscar Referencia" aria-label="Buscar" data-inputmask='"mask": "999999"' data-mask required>
+        <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Referencia" aria-label="Buscar" data-inputmask='"mask": "999999"' data-mask required>
         <div class="input-group-append">
             <button class="btn btn-navbar" type="submit">
                 <i class="fas fa-search"></i>
@@ -41,7 +41,7 @@
     <!-- SEARCH FORM -->
     {!! Form::open(['route' => 'ventas.buscar.pedido', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
     <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="text" name="buscar" placeholder="Buscar Pedido" aria-label="Buscar" required>
+        <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Pedido Web" aria-label="Buscar" required>
         <div class="input-group-append">
             <button class="btn btn-navbar" type="submit">
                 <i class="fas fa-search"></i>
@@ -49,6 +49,19 @@
         </div>
     </div>
     {!! Form::close() !!}
+
+    <!-- SEARCH FORM -->
+    {!! Form::open(['route' => 'ventas.buscar.fecha', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
+    <div class="input-group input-group-sm">
+        <input class="form-control form-control-navbar" type="date" name="buscar" placeholder="Buscar Fecha" aria-label="Buscar" required>
+        <div class="input-group-append">
+            <button class="btn btn-navbar" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+    {!! Form::close() !!}
+
 @endsection
 
 @section('breadcrumb')

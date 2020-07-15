@@ -7,7 +7,7 @@
     <!-- SEARCH FORM -->
     {!! Form::open(['route' => 'buscar.cedula', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
     <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="text" name="buscar" placeholder="Buscar Cedula" aria-label="Buscar" data-inputmask='"mask": "A-99999999"' data-mask required>
+        <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Cedula" aria-label="Buscar" data-inputmask='"mask": "A-99999999"' data-mask required>
         <div class="input-group-append">
             <button class="btn btn-navbar" type="submit">
                 <i class="fas fa-search"></i>
@@ -18,7 +18,7 @@
     <!-- SEARCH FORM -->
     {!! Form::open(['route' => 'buscar.factura', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
     <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="text" name="buscar" placeholder="Buscar Factura" aria-label="Buscar" data-inputmask='"mask": "99999"' data-mask required>
+        <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Factura" aria-label="Buscar" data-inputmask='"mask": "99999"' data-mask required>
         <div class="input-group-append">
             <button class="btn btn-navbar" type="submit">
                 <i class="fas fa-search"></i>
@@ -29,7 +29,7 @@
     <!-- SEARCH FORM -->
     {!! Form::open(['route' => 'buscar.referencia', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
     <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="text" name="buscar" placeholder="Buscar Referencia" aria-label="Buscar" data-inputmask='"mask": "999999"' data-mask required>
+        <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Referencia" aria-label="Buscar" data-inputmask='"mask": "999999"' data-mask required>
         <div class="input-group-append">
             <button class="btn btn-navbar" type="submit">
                 <i class="fas fa-search"></i>
@@ -37,6 +37,34 @@
         </div>
     </div>
     {!! Form::close() !!}
+
+    @if(config('app.pagina_web'))
+        <!-- SEARCH FORM -->
+        {!! Form::open(['route' => 'ventas.buscar.pedido', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
+        <div class="input-group input-group-sm">
+            <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Pedido Web" aria-label="Buscar" required>
+            <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    @endif
+
+
+    <!-- SEARCH FORM -->
+    {!! Form::open(['route' => 'buscar.fecha', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
+    <div class="input-group input-group-sm">
+        <input class="form-control form-control-navbar" type="date" name="buscar" placeholder="Buscar Fecha" aria-label="Buscar" required>
+        <div class="input-group-append">
+            <button class="btn btn-navbar" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+    {!! Form::close() !!}
+
 @endsection
 
 @section('breadcrumb')
@@ -79,14 +107,20 @@
                         @endif
                         @if($compra->modulo_3 != null)
                             <li class="nav-item nav-link">
-                                <span class="text-bold text-muted">Combo de Limpieza:</span>
+                                <span class="text-bold text-muted">Arma tu combo</span>
                                 <span class="float-right text-success text-bold">{{ str_pad($compra->modulo_3, 2, "0", STR_PAD_LEFT) }}</span>
                             </li>
                         @endif
                         @if($compra->modulo_4 != null)
                             <li class="nav-item nav-link">
-                                <span class="text-bold text-muted">Combo de Higiene:</span>
+                                <span class="text-bold text-muted">Cantidad de Rubros</span>
                                 <span class="float-right text-success text-bold">{{ str_pad($compra->modulo_4, 2, "0", STR_PAD_LEFT) }}</span>
+                            </li>
+                        @endif
+                        @if($compra->capture != null)
+                            <li class="nav-item nav-link">
+                                <span class="text-bold text-muted">Monto Total</span>
+                                <span class="float-right text-success text-bold">{{ number_format($compra->capture, 2, ',', '.') }}</span>
                             </li>
                         @endif
                         <li class="nav-item nav-link">
@@ -176,6 +210,60 @@
 
 
     </div>
+
+    @if(!$rubros->isEmpty() && config('app.arma_tu_combo'))
+        <div class="row justify-content-center">
+
+            <div class="col-md-7">
+
+                <div class="card card-widget widget-user-2">
+                    <div class="card-body p-0">
+
+                        <table class="table table-hover table-valign-middle table-sm table-bordered table-responsive-sm">
+                            <thead class="thead-dark">
+                            <tr class="text-center">
+                                <th>Cant.</th>
+                                <th>Descripcion</th>
+                                <th>Precio</th>
+                                <th>Neto</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @php($total = 0)
+                            @foreach($rubros as $rubro)
+                                @php($total = $total + ($rubro->cantidad * $rubro->precio))
+                                <tr class="text-center table-primary text-sm">
+                                    <td class="text-center">
+                                        <span class="text-bold">{{ $rubro->cantidad }}</span>
+                                    </td>
+                                    <td class="text-left">{{ $rubro->nombre }}</td>
+                                    <td class="text-right">{{ number_format($rubro->precio, 2, ',', '.') }}</td>
+                                    <td class="text-bold text-right">{{ number_format($rubro->neto, 2, ',', '.') }}</td>
+                                </tr>
+                            @endforeach
+                            @php($bolsa = $compra->capture - $total)
+                            <tr class="text-center table-primary text-sm">
+                                <td colspan="2" rowspan="2" class="text-right text-bold bg-light"></td>
+                                <td class="text-center text-bold">Bolsas Plástica</td>
+                                <td class="text-bold text-right">{{ number_format($bolsa, 2, ',', '.') }}</td>
+                            </tr>
+                            <tr class="text-center table-primary text-sm">
+                                {{--<td colspan="2" class="text-right text-bold bg-light"></td>
+                                --}}<td class="text-center text-bold bg-dark">Total</td>
+                                <td class="text-bold text-right bg-dark">{{ number_format($compra->capture, 2, ',', '.') }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+    @endif
 
 @endsection
 

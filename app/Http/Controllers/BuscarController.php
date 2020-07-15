@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Carrito;
 use App\Compra;
 use App\Datos_personal;
 use App\Http\Requests\PedidosRequest;
+use App\Producto;
 use App\Venta;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,15 +22,22 @@ class BuscarController extends Controller
             //dd($busqueda->id);
             $carbon = new Carbon();
             $compras = Compra::where('datos_id', '=', $busqueda->id)->orderBy('id', 'DESC')->paginate(10);
-            $compras->each(function ($compra){
+            /*$compras->each(function ($compra){
                 $compra->datos;
                 $compra->users;
-            });
+            });*/
+            $ventas = Venta::where('datos_id', '=', $busqueda->id)->orderBy('id', 'DESC')->paginate(10);
+            /*$ventas->each(function ($venta){
+                $venta->datos;
+                $venta->users;
+            });*/
             flash('<em>Resultados para la Cedula</em> <strong><a href="#"><i class="fas fa-search"></i> 
                 '.$request->buscar.' </strong></a>', 'primary')->important();
             return view('admin.buscar.index')
                 ->with('carbon', $carbon)
-                ->with('compras', $compras);
+                ->with('compras', $compras)
+                ->with('ventas', $ventas)
+                ->with('datos', $busqueda);
 
         }else{
             flash('<em>Sin Resultados para la Cedula</em> <strong><a href="#"><i class="fas fa-search"></i> 
@@ -39,16 +48,41 @@ class BuscarController extends Controller
 
     public function referencia(Request $request)
     {
+        $carrito = null;
+        $total = null;
         $busqueda = Compra::where('referencia', '=', $request->buscar)->first();
         if($busqueda)
         {
+            $carrito = Carrito::where('compras_id', '=', $busqueda->id)->get();
+            if ($carrito) {
+                $carrito->each( function ( $carrito ) {
+                    $producto        = Producto::find( $carrito->productos_id );
+                    $carrito->nombre = $producto->nombre;
+                    $carrito->neto   = $carrito->cantidad * $carrito->precio;
+                } );
+            }
             $carbon = new Carbon();
             flash('<em>Resultados para la Referencia</em> <strong><a href="#"><i class="fas fa-search"></i> 
                 '.$request->buscar.' </strong></a>', 'primary')->important();
             return view('admin.buscar.referencia')
                 ->with('carbon', $carbon)
-                ->with('compra', $busqueda);
+                ->with('compra', $busqueda)
+                ->with('rubros', $carrito);
         }else{
+
+            if (config('app.pagina_web')) {
+                $busqueda = Venta::where( 'referencia', '=', $request->buscar )->first();
+                if ( $busqueda ) {
+                    $carbon = new Carbon();
+                    flash( '<em>Resultados para la Referencia</em> <strong><a href="#"><i class="fas fa-search"></i> 
+                ' . $request->buscar . ' </strong></a>', 'primary' )->important();
+
+                    return view( 'admin.buscar.factura' )
+                        ->with( 'carbon', $carbon )
+                        ->with( 'compra', $busqueda );
+                }
+            }
+
             flash('<em>Sin Resultados para la Referencia</em> <strong><a href="#"><i class="fas fa-search"></i> 
                 '.$request->buscar.' </strong></a>', 'warning')->important();
             return redirect()->route('pedidos.index');
@@ -58,16 +92,41 @@ class BuscarController extends Controller
 
     public function factura(Request $request)
     {
+        $carrito = null;
+        $total = null;
         $busqueda = Compra::where('factura', '=', $request->buscar)->first();
         if($busqueda)
         {
+            $carrito = Carrito::where('compras_id', '=', $busqueda->id)->get();
+            if ($carrito) {
+                $carrito->each( function ( $carrito ) {
+                    $producto        = Producto::find( $carrito->productos_id );
+                    $carrito->nombre = $producto->nombre;
+                    $carrito->neto   = $carrito->cantidad * $carrito->precio;
+                } );
+            }
             $carbon = new Carbon();
             flash('<em>Resultados para la Factura</em> <strong><a href="#"><i class="fas fa-search"></i> 
                 '.$request->buscar.' </strong></a>', 'primary')->important();
             return view('admin.buscar.referencia')
                 ->with('carbon', $carbon)
-                ->with('compra', $busqueda);
+                ->with('compra', $busqueda)
+                ->with('rubros', $carrito);
         }else{
+
+            if (config('app.pagina_web')) {
+                $busqueda = Venta::where( 'factura', '=', $request->buscar )->first();
+                if ( $busqueda ) {
+                    $carbon = new Carbon();
+                    flash( '<em>Resultados para la Factura</em> <strong><a href="#"><i class="fas fa-search"></i> 
+                ' . $request->buscar . ' </strong></a>', 'primary' )->important();
+
+                    return view( 'admin.buscar.factura' )
+                        ->with( 'carbon', $carbon )
+                        ->with( 'compra', $busqueda );
+                }
+            }
+
             flash('<em>Sin Resultados para la Factura</em> <strong><a href="#"><i class="fas fa-search"></i> 
                 '.$request->buscar.' </strong></a>', 'warning')->important();
             return redirect()->route('pedidos.index');
@@ -114,6 +173,29 @@ class BuscarController extends Controller
                 ->with('carbon', $carbon)
                 ->with('compra', $busqueda);
         }else{
+
+
+            $busqueda = Compra::where('referencia', '=', $request->buscar)->first();
+            if($busqueda)
+            {
+                $carrito = Carrito::where('compras_id', '=', $busqueda->id)->get();
+                if ($carrito) {
+                    $carrito->each( function ( $carrito ) {
+                        $producto        = Producto::find( $carrito->productos_id );
+                        $carrito->nombre = $producto->nombre;
+                        $carrito->neto   = $carrito->cantidad * $carrito->precio;
+                    } );
+                }
+                $carbon = new Carbon();
+                flash('<em>Resultados para la Referencia</em> <strong><a href="#"><i class="fas fa-search"></i> 
+                '.$request->buscar.' </strong></a>', 'primary')->important();
+                return view('admin.buscar.referencia')
+                    ->with('carbon', $carbon)
+                    ->with('compra', $busqueda)
+                    ->with('rubros', $carrito);
+            }
+
+
             flash('<em>Sin Resultados para la Referencia</em> <strong><a href="#"><i class="fas fa-search"></i> 
                 '.$request->buscar.' </strong></a>', 'danger')->important();
             return redirect()->route('ventas.index');
@@ -134,6 +216,29 @@ class BuscarController extends Controller
                 ->with('carbon', $carbon)
                 ->with('compra', $busqueda);
         }else{
+
+
+            $busqueda = Compra::where('factura', '=', $request->buscar)->first();
+            if($busqueda)
+            {
+                $carrito = Carrito::where('compras_id', '=', $busqueda->id)->get();
+                if ($carrito) {
+                    $carrito->each( function ( $carrito ) {
+                        $producto        = Producto::find( $carrito->productos_id );
+                        $carrito->nombre = $producto->nombre;
+                        $carrito->neto   = $carrito->cantidad * $carrito->precio;
+                    } );
+                }
+                $carbon = new Carbon();
+                flash('<em>Resultados para la Factura</em> <strong><a href="#"><i class="fas fa-search"></i> 
+                '.$request->buscar.' </strong></a>', 'primary')->important();
+                return view('admin.buscar.referencia')
+                    ->with('carbon', $carbon)
+                    ->with('compra', $busqueda)
+                    ->with('rubros', $carrito);
+            }
+
+
             flash('<em>Sin Resultados para la Factura</em> <strong><a href="#"><i class="fas fa-search"></i> 
                 '.$request->buscar.' </strong></a>', 'danger')->important();
             return redirect()->route('ventas.index');
@@ -168,7 +273,7 @@ class BuscarController extends Controller
         {
             flash('<em>Resultados para la Fecha</em> <strong><i class="fas fa-search"></i> 
                 '.$carbon->parse($request->buscar)->format('d-m-Y').' </strong>', 'primary')->important();
-            return view('admin.buscar.index')
+            return view('admin.buscar.compras')
                 ->with('carbon', $carbon)
                 ->with('compras', $busqueda);
         }else{
@@ -187,7 +292,7 @@ class BuscarController extends Controller
             $carbon = new Carbon();
             /*flash('<em>Resultados para la Fecha</em> <strong><a href="#"><i class="fas fa-search"></i>
                 '.$carbon->parse($fecha)->format('d-m-Y').' </strong></a>', 'info')->important();*/
-            return view('admin.buscar.index')
+            return view('admin.buscar.compras')
                 ->with('carbon', $carbon)
                 ->with('compras', $busqueda);
         }else{

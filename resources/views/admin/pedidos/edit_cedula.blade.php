@@ -182,7 +182,7 @@
 
             <div class="row">
                 <div class="col-12">
-                    <a href="{{ route('pedidos.index') }}" class="btn btn-secondary">Cancelar</a>
+                    <a href="javascript:history.back()" class="btn btn-secondary">Cancelar</a>
                     <input type="hidden" name="fecha" value="{{ date('Y-m-d') }}">
                     <input type="hidden" name="estatus" value="Esperando Pago">
                     <input type="hidden" name="users_id" value="{{ auth()->user()->id }}">

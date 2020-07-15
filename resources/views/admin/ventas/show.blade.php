@@ -5,7 +5,7 @@
 
 @section('buscar')
     <!-- SEARCH FORM -->
-    {!! Form::open(['route' => 'ventas.buscar.cedula', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
+    {!! Form::open(['route' => 'buscar.cedula', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
         <div class="input-group input-group-sm">
             <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Cedula" aria-label="Buscar" data-inputmask='"mask": "A-99999999"' data-mask required>
             <div class="input-group-append">
