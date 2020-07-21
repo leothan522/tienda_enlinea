@@ -122,7 +122,18 @@
                                     </td>
                                     <td class="text-left">{{ $producto->nombre }}</td>
                                     <td class="text-center text-bold">{{ number_format($producto->precio, 2, ',', '.') }}</td>
-                                    <td class="text-center">{{ ucwords($producto->band) }}</td>
+                                    <td class="text-center">
+										@if($producto->band == "activo")
+												<span class="badge badge-success">
+													{{ ucwords($producto->band) }}	
+												</span>
+											@else
+												<span class="badge badge-danger">
+												{{ ucwords($producto->band) }}	
+												</span>
+										@endif
+										
+									</td>
                                     <td style="width: 10px">
                                         {!! Form::open(['route' => ['productos.destroy', $producto->id], 'method' => 'DELETE']) !!}
                                         <div class="btn-group">
@@ -130,8 +141,14 @@
                                                 <i class="fas fa-eye"></i></a>--}}
                                             {{--<a href="{{ route('productos.show', $producto->id) }}" class="btn btn-default btn-sm" title="Ver">
                                                 <i class="fas fa-cog"></i></a>--}}
-                                            <a href="{{ route('productos.show', $producto->id) }}" class="btn btn-default btn-sm text-success" title="Ver">
-                                                <i class="fas fa-cog"></i></a>
+											@if($producto->band == "activo")
+													<a href="{{ route('productos.show', $producto->id) }}" class="btn btn-default btn-sm text-fuchsia" title="Inactivar">
+													<i class="fas fa-ban"></i></a>
+												@else
+													<a href="{{ route('productos.show', $producto->id) }}" class="btn btn-default btn-sm text-success" title="Activar">
+													<i class="fas fa-check"></i></a>
+											@endif
+                                            
                                             <a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-default btn-sm text-warning" title="Editar">
                                                 <i class="fas fa-pencil-alt"></i></a>
                                             <button type="submit" onclick="return confirm('Desea Eliminar al Rubro {{ $producto->nombre }}')" class="btn btn-default btn-sm text-danger" title="Eliminar">

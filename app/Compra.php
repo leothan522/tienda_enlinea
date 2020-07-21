@@ -21,6 +21,10 @@ class Compra extends Model
     public function carrito(){
         return $this->hasMany('App\Carrito');
     }
+	
+	public function adicionales(){
+        return $this->hasOne('App\Adicional');
+    }
 
 
 }

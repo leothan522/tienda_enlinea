@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Adicional;
 use App\Compra;
 use App\Llamada;
 use Illuminate\Contracts\View\View;
@@ -12,10 +13,18 @@ class PedidosExport implements FromView, ShouldAutoSize
 {
     public function view(): View
     {
-        $compras = Compra::where('fecha', '=', date('Y-m-d'))->orderBy('id', 'ASC')->get();
+		$compras = Compra::where('fecha', '=', date('Y-m-d'))->orderBy('id', 'ASC')->get();
         $compras->each(function ($compra){
             $compra->datos;
             $compra->users;
+			$adicionales = Adicional::where('compras_id', '=', $compra->id)->first();
+			if($adicionales){
+				$compra->add_rubros = $adicionales->rubros;
+				$compra->add_monto = $adicionales->monto;
+			}else{
+				$compra->add_rubros = null;
+				$compra->add_monto = null;
+			}
         });
         $llamadas = Llamada::where('fecha', '=', date('Y-m-d'))->first();
         if ($llamadas)

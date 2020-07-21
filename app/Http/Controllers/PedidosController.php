@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Adicional;
 use App\Carrito;
 use App\Compra;
 use App\Datos_personal;
@@ -93,6 +94,12 @@ class PedidosController extends Controller
         $pedido->municipio = $request->municipio;
         $pedido->responsable = strtoupper($request->responsable);
         $pedido->save();
+		
+		if($request->rubros != null){
+			$adicionales = new Adicional($request->all());
+			$adicionales->compras_id = $pedido->id;
+			$adicionales->save();
+		}
 
         if ($request->modulo_3 != null) {
 
@@ -138,8 +145,15 @@ class PedidosController extends Controller
     {
         $carrito = null;
         $total = null;
+		$rubros = null;
+		$monto = null;
         $carbon = new Carbon();
         $compra = Compra::find($id);
+		$adicionales = Adicional::where('compras_id', '=', $compra->id)->first();
+		if($adicionales){
+			$rubros = $adicionales->rubros;
+			$monto = $adicionales->monto;
+		}
         $carrito = Carrito::where('compras_id', '=', $id)->get();
         if ($carrito) {
             $carrito->each( function ( $carrito ) {
@@ -152,7 +166,9 @@ class PedidosController extends Controller
         return view('admin.pedidos.show')
             ->with('carbon', $carbon)
             ->with('compra', $compra)
-            ->with('rubros', $carrito);
+            ->with('rubros', $carrito)
+			->with('cantidad', $rubros)
+			->with('monto', $monto);
     }
 
     /**
@@ -163,13 +179,22 @@ class PedidosController extends Controller
      */
     public function edit($id)
     {
+		$rubros = null;
+		$monto = null;
         $productos = Producto::where('band', '=', 'activo')->orderBy('nombre', 'ASC')->pluck('nombre', 'id');
         $compra = Compra::find($id);
+		$adicionales = Adicional::where('compras_id', '=', $compra->id)->first();
+		if($adicionales){
+			$rubros = $adicionales->rubros;
+			$monto = $adicionales->monto;
+		}
         $carrito = Carrito::where('compras_id', '=', $id)->get();
         return view('admin.pedidos.edit')
             ->with('compra', $compra)
             ->with('productos', $productos)
-            ->with('rubros', $carrito);
+            ->with('rubros', $carrito)
+			->with('cantidad', $rubros)
+			->with('monto', $monto);
     }
 
     /**
@@ -229,6 +254,22 @@ class PedidosController extends Controller
             $pedido->estatus = "Facturado";
         }
         $pedido->update();
+		
+		if($request->rubros){
+			
+			$db = Adicional::where('compras_id', '=', $pedido->id)->first();
+			if($db){
+				$adicionales = Adicional::find($db->id);
+				$adicionales->fill($request->all());
+				//$adicionales->compras_id = $pedido->id;
+				$adicionales->update();
+			}else{
+				$adicionales = new Adicional($request->all());
+				$adicionales->compras_id = $pedido->id;
+				$adicionales->save();
+			}
+			
+		}
 
         if ($request->cedula) {
 
@@ -386,6 +427,12 @@ class PedidosController extends Controller
         $pedido->municipio = $request->municipio;
         $pedido->responsable = strtoupper($request->responsable);
         $pedido->save();
+		
+		if($request->rubros != null){
+			$adicionales = new Adicional($request->all());
+			$adicionales->compras_id = $pedido->id;
+			$adicionales->save();
+		}
 
         if ($request->modulo_3 != null) {
 

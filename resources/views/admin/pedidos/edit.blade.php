@@ -103,6 +103,35 @@
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
+					@if(config('app.adicionales'))
+					<div class="card card-primary collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Adicionales</h3>
+
+                            <div class="card-tools">
+							  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+							  </button>
+							</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-group">
+                                <label class="col-md-12">Cant. de Rubros</label>
+                                {!! Form::number('rubros', $cantidad, ['class' => 'form-control', 'placeholder' => 'Numero',
+                                                    'min' => 1, 'pattern' => "^[0-9]+"]) !!}
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <label class="col-md-12">Monto Total</label>
+                                {!! Form::number('monto', $monto, ['class' => 'form-control', 'placeholder' => 'Cantidad',
+                                                    'min' => 1, 'pattern' => "^[0-9]+", 'step' => 'any']) !!}
+                            </div>
+
+                    
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+					@endif
 				</div>
 
 					@if(config('app.arma_tu_combo'))

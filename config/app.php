@@ -231,6 +231,7 @@ return [
 
     //VARIABLES DE ENTORNO PROPIAS
     'municipio' => env('APP_MUNICIPIO', 'ROSCIO'),
+    'adicionales' => env('APP_ADICIONALES', false),
     'pagina_web' => env('APP_PAGINA_WEB', false),
     'arma_tu_combo' => env('APP_ARMA_TU_COMBO', false),
     'bolsa' => env('APP_BOLSA', 23500),

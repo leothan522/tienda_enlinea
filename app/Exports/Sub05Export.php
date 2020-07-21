@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Adicional;
 use App\Compra;
 use App\Llamada;
 use Carbon\Carbon;
@@ -21,6 +22,14 @@ class Sub05Export implements FromView, ShouldAutoSize
         $compras->each(function ($compra){
             $compra->datos;
             $compra->users;
+			$adicionales = Adicional::where('compras_id', '=', $compra->id)->first();
+			if($adicionales){
+				$compra->add_rubros = $adicionales->rubros;
+				$compra->add_monto = $adicionales->monto;
+			}else{
+				$compra->add_rubros = null;
+				$compra->add_monto = null;
+			}
         });
         $llamadas = Llamada::where('fecha', '=', $fecha)->first();
         if ($llamadas)

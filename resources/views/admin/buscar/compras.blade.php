@@ -40,6 +40,20 @@
         </div>
     </div>
     {!! Form::close() !!}
+	
+	@if(config('app.pagina_web'))
+        <!-- SEARCH FORM -->
+        {!! Form::open(['route' => 'ventas.buscar.pedido', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
+        <div class="input-group input-group-sm">
+            <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Pedido Web" aria-label="Buscar" required>
+            <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    @endif
 
     <!-- SEARCH FORM -->
     {!! Form::open(['route' => 'buscar.fecha', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
