@@ -66,7 +66,7 @@
         </div>
         {!! Form::close() !!}
     @endif
-    
+
 @endsection
 
 @section('content')
@@ -103,7 +103,24 @@
                 </div>
             </div>
 
-
+            <div class="row justify-content-center">
+                    <div class="col-md-6 text-center">
+                        <img class="img-thumbnail" src="{{ asset('img/logo_tienda.png') }}" alt="Entrar">
+                        <legend></legend>
+                        {{--@if(config('app.municipio') == 'ROSCIO')
+                            <h4 class="text-bold text-navy">Juan German Roscio</h4>
+                        @endif
+                        @if(config('app.municipio') == 'INFANTE')
+                            <h4 class="text-bold text-navy">Leonardo Infante</h4>
+                        @endif
+                        @if(config('app.municipio') == 'MIRANDA')
+                            <h4 class="text-bold text-navy">Francisco de Miranda</h4>
+                        @endif
+                        @if(config('app.municipio') == 'MONAGAS')
+                            <h4 class="text-bold text-navy">Jose Tadeos Monagas</h4>
+                        @endif--}}
+                    </div>
+            </div>
 
         </div>
 

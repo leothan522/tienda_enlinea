@@ -19,6 +19,15 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <!-- Styles -->
+    <style>
+        .header a img{
+            width: 50%;
+            display: block;
+            margin: 0px auto;
+            padding: 8px;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
