@@ -1,5 +1,5 @@
 <div class="float-right d-none d-sm-block">
-    <b>Version</b> 4.1
+    <b>Version</b> 4.2
 </div>
 <strong>
     Hecho por <a href="mailto:leothan522@gmail.com" target="_blank">Ing. Yonathan Castillo</a>

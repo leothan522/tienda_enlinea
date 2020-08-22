@@ -9,7 +9,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>@yield("title", 'Alguarisa Tienda en Linea')</title>
+    <title>@yield("title", 'Tienda en Linea Alguarisa')</title>
     <link href="{{ asset('img/logo_movimiento.jpg') }}" rel="icon">
 
     <!-- Font Awesome Icons -->

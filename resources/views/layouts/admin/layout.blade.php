@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@yield("title", 'EPJ Guárico')</title>
+    <title>@yield("title", 'Tienda en Linea Alguarisa')</title>
     <link href="{{ asset('img/logo_movimiento.jpg') }}" rel="icon">
 
     <!-- Tell the browser to be responsive to screen width -->
@@ -84,8 +84,8 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-	
-	
+
+
     <footer class="main-footer">
         @include("layouts.admin.main-footer")
     </footer>

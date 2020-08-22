@@ -126,7 +126,7 @@
                                                     'min' => 1, 'pattern' => "^[0-9]+", 'step' => 'any']) !!}
                             </div>
 
-                    
+
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -187,7 +187,7 @@
                                                     ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione']) !!}
                                         <span class="col-md-1"></span>
                                         {!! Form::number('cant[]', $rubro->cantidad, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
-                                                        'min' => 1, 'max' => 2, 'pattern' => "^[0-9]+"]) !!}
+                                                        'min' => 1, 'pattern' => "^[0-9]+"]) !!}
                                         @if($i <= 1)
                                         <a href="javascript:void(0);" class="add_button" title="Add field"><i class="fas fa-plus"></i></a>
                                         <a href="javascript:void(0);" class="add_button" title="Add field"></a>
