@@ -60,6 +60,12 @@ class PedidosController extends Controller
         $monto = null;
         $total = null;
         $contador = null;
+        $precio_1 = null;
+        $rubros_1 = null;
+        $precio_2 = null;
+        $rubros_2 = null;
+        $modulo_1 = null;
+        $modulo_2 = null;
         //dd(count($request->productos));
         //dd($request->all());
         $datos = Datos_personal::where('cedula', '=', $request->cedula)->first();
@@ -94,11 +100,75 @@ class PedidosController extends Controller
         $pedido->municipio = $request->municipio;
         $pedido->responsable = strtoupper($request->responsable);
         $pedido->save();
-		
-		if($request->rubros != null){
-			$adicionales = new Adicional($request->all());
-			$adicionales->compras_id = $pedido->id;
-			$adicionales->save();
+
+		if($request->modulo_1 != null || $request->modulo_2 != null){
+
+            if ($request->modulo_1 != null){
+                $producto = Producto::where( 'nombre' , '=', 'MODULO 01' )->first();
+                if ($producto){
+                    $precio_1 = $producto->precio;
+                    $rubros_1 = $producto->rubros * $request->modulo_1;
+                    $modulo_1 = $request->modulo_1 * $precio_1;
+
+                    $carrito               = new Carrito();
+                    $carrito->compras_id   = $pedido->id;
+                    $carrito->productos_id = $producto->id;
+                    $carrito->cantidad     = $request->modulo_1;
+                    $carrito->precio     = $producto->precio;
+                    $carrito->save();
+                }
+            }
+
+            if ($request->modulo_2 != null){
+                $producto = Producto::where( 'nombre' , '=', 'MODULO 02' )->first();
+                if ($producto){
+                    $precio_2 = $producto->precio;
+                    $rubros_2 = $producto->rubros * $request->modulo_2;
+                    $modulo_2 = $request->modulo_2 * $precio_2;
+
+                    $carrito               = new Carrito();
+                    $carrito->compras_id   = $pedido->id;
+                    $carrito->productos_id = $producto->id;
+                    $carrito->cantidad     = $request->modulo_2;
+                    $carrito->precio     = $producto->precio;
+                    $carrito->save();
+                }
+            }
+
+            if($request->adicionales) {
+
+                $contador = count( $request->adicionales );
+
+                for ( $i = 0; $i < $contador; $i ++ ) {
+
+                    $cantidad = $cantidad + $request->cant_adicionales[ $i ];
+                    $producto = Producto::find( $request->adicionales[ $i ] );
+                    $neto     = $request->cant_adicionales[ $i ] * $producto->precio;
+                    $monto    = $monto + $neto;
+
+                    $carrito               = new Carrito();
+                    $carrito->compras_id   = $pedido->id;
+                    $carrito->productos_id = $request->adicionales[ $i ];
+                    $carrito->cantidad     = $request->cant_adicionales[ $i ];
+                    $carrito->precio       = $producto->precio;
+                    $carrito->save();
+                }
+
+                $adicionales = new Adicional();
+                $adicionales->compras_id = $pedido->id;
+                $adicionales->rubros = $cantidad;
+                $adicionales->monto = $monto;
+                $adicionales->save();
+
+            }
+
+            //$bolsa = config( 'app.bolsa' );
+            $total = $modulo_1 + $modulo_2 + $monto;
+
+            $pedido           = Compra::find( $pedido->id );
+            $pedido->modulo_4 = $cantidad + $rubros_1 + $rubros_2;
+            $pedido->capture  = $total;
+            $pedido->update();
 		}
 
         if ($request->modulo_3 != null) {
@@ -181,7 +251,7 @@ class PedidosController extends Controller
     {
 		$rubros = null;
 		$monto = null;
-        $productos = Producto::where('band', '=', 'activo')->orderBy('nombre', 'ASC')->pluck('nombre', 'id');
+        $productos = Producto::where('band', '=', 'activo')->where('rubros', '=', null)->orderBy('nombre', 'ASC')->pluck('nombre', 'id');
         $compra = Compra::find($id);
 		$adicionales = Adicional::where('compras_id', '=', $compra->id)->first();
 		if($adicionales){
@@ -210,6 +280,12 @@ class PedidosController extends Controller
         $monto = null;
         $total = null;
         $contador = null;
+        $precio_1 = null;
+        $rubros_1 = null;
+        $precio_2 = null;
+        $rubros_2 = null;
+        $modulo_1 = null;
+        $modulo_2 = null;
 
         $datos = Datos_personal::find($request->datos_id);
 
@@ -254,9 +330,9 @@ class PedidosController extends Controller
             $pedido->estatus = "Facturado";
         }
         $pedido->update();
-		
+
 		if($request->rubros){
-			
+
 			$db = Adicional::where('compras_id', '=', $pedido->id)->first();
 			if($db){
 				$adicionales = Adicional::find($db->id);
@@ -268,7 +344,7 @@ class PedidosController extends Controller
 				$adicionales->compras_id = $pedido->id;
 				$adicionales->save();
 			}
-			
+
 		}
 
         if ($request->cedula) {
@@ -277,6 +353,76 @@ class PedidosController extends Controller
             foreach ($rubros as $rubro){
                 $carrito = Carrito::find($rubro->id);
                 $carrito->delete();
+            }
+
+            if($request->modulo_1 != null || $request->modulo_2 != null){
+
+                if ($request->modulo_1 != null){
+                    $producto = Producto::where( 'nombre' , '=', 'MODULO 01' )->first();
+                    if ($producto){
+                        $precio_1 = $producto->precio;
+                        $rubros_1 = $producto->rubros * $request->modulo_1;
+                        $modulo_1 = $request->modulo_1 * $precio_1;
+
+                        $carrito               = new Carrito();
+                        $carrito->compras_id   = $pedido->id;
+                        $carrito->productos_id = $producto->id;
+                        $carrito->cantidad     = $request->modulo_1;
+                        $carrito->precio     = $producto->precio;
+                        $carrito->save();
+                    }
+                }
+
+                if ($request->modulo_2 != null){
+                    $producto = Producto::where( 'nombre' , '=', 'MODULO 02' )->first();
+                    if ($producto){
+                        $precio_2 = $producto->precio;
+                        $rubros_2 = $producto->rubros * $request->modulo_2;
+                        $modulo_2 = $request->modulo_2 * $precio_2;
+
+                        $carrito               = new Carrito();
+                        $carrito->compras_id   = $pedido->id;
+                        $carrito->productos_id = $producto->id;
+                        $carrito->cantidad     = $request->modulo_2;
+                        $carrito->precio     = $producto->precio;
+                        $carrito->save();
+                    }
+                }
+
+                if($request->adicionales) {
+
+                    $contador = count( $request->adicionales );
+
+                    for ( $i = 0; $i < $contador; $i ++ ) {
+
+                        $cantidad = $cantidad + $request->cant_adicionales[ $i ];
+                        $producto = Producto::find( $request->adicionales[ $i ] );
+                        $neto     = $request->cant_adicionales[ $i ] * $producto->precio;
+                        $monto    = $monto + $neto;
+
+                        $carrito               = new Carrito();
+                        $carrito->compras_id   = $pedido->id;
+                        $carrito->productos_id = $request->adicionales[ $i ];
+                        $carrito->cantidad     = $request->cant_adicionales[ $i ];
+                        $carrito->precio       = $producto->precio;
+                        $carrito->save();
+                    }
+
+                    $adicionales = new Adicional();
+                    $adicionales->compras_id = $pedido->id;
+                    $adicionales->rubros = $cantidad;
+                    $adicionales->monto = $monto;
+                    $adicionales->save();
+
+                }
+
+                //$bolsa = config( 'app.bolsa' );
+                $total = $modulo_1 + $modulo_2 + $monto;
+
+                $pedido           = Compra::find( $pedido->id );
+                $pedido->modulo_4 = $cantidad + $rubros_1 + $rubros_2;
+                $pedido->capture  = $total;
+                $pedido->update();
             }
 
             if ($request->modulo_3 != null) {
@@ -330,9 +476,14 @@ class PedidosController extends Controller
 
     public function create_cedula(Request $request)
     {
+        //dd($request->all());
+        if ($request->cedula == null){
+            flash('No puedes dejar el campo <strong>Cedula</strong> vacio', 'danger')->important();
+            return redirect()->route('pedidos.index');
+        }
         $cne = null;
         $nombre = null;
-        $productos = Producto::where('band', '=', 'activo')->orderBy('nombre', 'ASC')->pluck('nombre', 'id');
+        $productos = Producto::where('band', '=', 'activo')->where('rubros', '=', null)->orderBy('nombre', 'ASC')->pluck('nombre', 'id');
 
         $datos = Datos_personal::where('cedula', '=', $request->cedula)->first();
         if (!$datos){
@@ -395,6 +546,12 @@ class PedidosController extends Controller
         $monto = null;
         $total = null;
         $contador = null;
+        $precio_1 = null;
+        $rubros_1 = null;
+        $precio_2 = null;
+        $rubros_2 = null;
+        $modulo_1 = null;
+        $modulo_2 = null;
 
         $datos = Datos_personal::find($id);
 
@@ -427,12 +584,76 @@ class PedidosController extends Controller
         $pedido->municipio = $request->municipio;
         $pedido->responsable = strtoupper($request->responsable);
         $pedido->save();
-		
-		if($request->rubros != null){
-			$adicionales = new Adicional($request->all());
-			$adicionales->compras_id = $pedido->id;
-			$adicionales->save();
-		}
+
+        if($request->modulo_1 != null || $request->modulo_2 != null){
+
+            if ($request->modulo_1 != null){
+                $producto = Producto::where( 'nombre' , '=', 'MODULO 01' )->first();
+                if ($producto){
+                    $precio_1 = $producto->precio;
+                    $rubros_1 = $producto->rubros * $request->modulo_1;
+                    $modulo_1 = $request->modulo_1 * $precio_1;
+
+                    $carrito               = new Carrito();
+                    $carrito->compras_id   = $pedido->id;
+                    $carrito->productos_id = $producto->id;
+                    $carrito->cantidad     = $request->modulo_1;
+                    $carrito->precio     = $producto->precio;
+                    $carrito->save();
+                }
+            }
+
+            if ($request->modulo_2 != null){
+                $producto = Producto::where( 'nombre' , '=', 'MODULO 02' )->first();
+                if ($producto){
+                    $precio_2 = $producto->precio;
+                    $rubros_2 = $producto->rubros * $request->modulo_2;
+                    $modulo_2 = $request->modulo_2 * $precio_2;
+
+                    $carrito               = new Carrito();
+                    $carrito->compras_id   = $pedido->id;
+                    $carrito->productos_id = $producto->id;
+                    $carrito->cantidad     = $request->modulo_2;
+                    $carrito->precio     = $producto->precio;
+                    $carrito->save();
+                }
+            }
+
+            if($request->adicionales) {
+
+                $contador = count( $request->adicionales );
+
+                for ( $i = 0; $i < $contador; $i ++ ) {
+
+                    $cantidad = $cantidad + $request->cant_adicionales[ $i ];
+                    $producto = Producto::find( $request->adicionales[ $i ] );
+                    $neto     = $request->cant_adicionales[ $i ] * $producto->precio;
+                    $monto    = $monto + $neto;
+
+                    $carrito               = new Carrito();
+                    $carrito->compras_id   = $pedido->id;
+                    $carrito->productos_id = $request->adicionales[ $i ];
+                    $carrito->cantidad     = $request->cant_adicionales[ $i ];
+                    $carrito->precio       = $producto->precio;
+                    $carrito->save();
+                }
+
+                $adicionales = new Adicional();
+                $adicionales->compras_id = $pedido->id;
+                $adicionales->rubros = $cantidad;
+                $adicionales->monto = $monto;
+                $adicionales->save();
+
+            }
+
+            //$bolsa = config( 'app.bolsa' );
+            $total = $modulo_1 + $modulo_2 + $monto;
+
+            $pedido           = Compra::find( $pedido->id );
+            $pedido->modulo_4 = $cantidad + $rubros_1 + $rubros_2;
+            $pedido->capture  = $total;
+            $pedido->update();
+        }
 
         if ($request->modulo_3 != null) {
 

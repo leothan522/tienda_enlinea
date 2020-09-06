@@ -89,3 +89,5 @@ Route::post('/cne', 'CNEController@buscar')->name('cne.show');
 
 // rutas Productos
 Route::resource('productos', 'ProductosController')->middleware('auth');
+Route::get('productos/modulo/create', 'ProductosController@create_mod')->name('mod.create')->middleware('auth');
+Route::get('productos/modulo/{id}/edit', 'ProductosController@edit_mod')->name('mod.edit')->middleware('auth');

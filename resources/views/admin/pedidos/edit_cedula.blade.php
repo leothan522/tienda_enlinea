@@ -58,7 +58,7 @@
                     </div>
                     <!-- /.card -->
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Datos del Pedido</h3>
@@ -106,32 +106,52 @@
                     </div>
                     <!-- /.card -->
 					@if(config('app.adicionales'))
-					<div class="card card-primary collapsed-card">
-                        <div class="card-header">
-                            <h3 class="card-title">Adicionales</h3>
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Adicionales</h3>
 
-                            <div class="card-tools">
-							  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
-							  </button>
-							</div>
-                        </div>
-                        <div class="card-body">
-                            <div class="input-group">
-                                <label class="col-md-12">Cant. de Rubros</label>
-                                {!! Form::number('rubros', null, ['class' => 'form-control', 'placeholder' => 'Numero',
-                                                    'min' => 1, 'pattern' => "^[0-9]+"]) !!}
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool add_button2" {{--data-card-widget="collapse"--}}><i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <br>
-                            <div class="input-group">
-                                <label class="col-md-12">Monto Total</label>
-                                {!! Form::number('monto', null, ['class' => 'form-control', 'placeholder' => 'Cantidad',
-                                                    'min' => 1, 'pattern' => "^[0-9]+", 'step' => 'any']) !!}
+                            <div class="card-body">
+                                {{--<div class="input-group">
+                                    <label class="col-md-12">Cant. de Rubros</label>
+                                    {!! Form::number('rubros', null, ['class' => 'form-control', 'placeholder' => 'Numero',
+                                                        'min' => 1, 'pattern' => "^[0-9]+"]) !!}
+                                </div>
+                                <br>
+                                <div class="input-group">
+                                    <label class="col-md-12">Monto Total</label>
+                                    {!! Form::number('monto', null, ['class' => 'form-control', 'placeholder' => 'Cantidad',
+                                                        'min' => 1, 'pattern' => "^[0-9]+", 'step' => 'any']) !!}
+                                </div>
+    --}}
+
+                                <div class="input-group">
+                                    {{--<label class="col-md-12">Rubros</label>--}}
+                                    <div class="field_wrapper2">
+                                        {{--<div class="input-group justify-content-center">
+
+                                            {!! Form::select('adicionales[]', $productos, null,
+                                                        ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione']) !!}
+                                            <span class="col-md-1"></span>
+                                            {!! Form::number('cant_adicionales[]', null, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
+                                                            'min' => 1, 'pattern' => "^[0-9]+"]) !!}
+                                            <a href="javascript:void(0);" class="add_button2" title="Add field"><i class="fas fa-plus"></i></a>
+                                            <a href="javascript:void(0);" class="add_button2" title="Add field"></a>
+
+                                        </div>
+                                        --}}
+                                    </div>
+                                </div>
+
+
+
                             </div>
-
-
+                            <!-- /.card-body -->
                         </div>
-                        <!-- /.card-body -->
-                    </div>
                     <!-- /.card -->
 					@endif
 					</div>
@@ -263,6 +283,37 @@
                 x--; //Decrement field counter
             });
         });
+
+        $(document).ready(function(){
+            var maxField = 10; //Input fields increment limitation
+            var addButton = $('.add_button2'); //Add button selector
+            var wrapper = $('.field_wrapper2'); //Input field wrapper
+            var fieldHTML = '<div class="input-group justify-content-center">' +
+                '<?php echo (Form::select('adicionales[]', $productos, null,
+			        ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione', 'required']))?>' +
+                '<span class="col-md-1"></span>' +
+                '<?php echo(Form::number('cant_adicionales[]', null, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
+		                                                              'min' => 1, 'pattern' => "^[0-9]+", 'required'])) ?>' +
+                '<a href="javascript:void(0);" class="remove_button2 text-danger" title="Remove field">' +
+                '               <i class="far fa-trash-alt"></i></a>' +
+                '           </div>'; //New input field html
+            var x = 1; //Initial field counter is 1
+            $(addButton).click(function(){ //Once add button is clicked
+                if(x < maxField){ //Check maximum number of input fields
+                    x++; //Increment field counter
+                    $(wrapper).append(fieldHTML); // Add field html
+                    $(".chosen-categoria").chosen({
+                        no_results_text: "Sin Resultados para "
+                    });
+                }
+            });
+            $(wrapper).on('click', '.remove_button2', function(e){ //Once remove button is clicked
+                e.preventDefault();
+                $(this).parent('div').remove(); //Remove field html
+                x--; //Decrement field counter
+            });
+        });
+
 
         $(".chosen-categoria").chosen({
             no_results_text: "Sin Resultados para "

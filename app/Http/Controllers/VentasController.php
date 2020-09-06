@@ -217,6 +217,10 @@ class VentasController extends Controller
 
     public function create_cedula(Request $request)
     {
+        if ($request->cedula == null){
+            flash('No puedes dejar el campo <strong>Cedula</strong> vacio', 'danger')->important();
+            return redirect()->route('ventas.index');
+        }
         $cne = null;
         $nombre = null;
         $datos = Datos_personal::where('cedula', '=', $request->cedula)->first();

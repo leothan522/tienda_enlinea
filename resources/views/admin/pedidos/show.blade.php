@@ -98,7 +98,7 @@
                         @endif
                         @if($compra->modulo_4 != null)
                         <li class="nav-item nav-link">
-                            <span class="text-bold text-muted">Cantidad de Rubros</span>
+                            <span class="text-bold text-muted">Total de Rubros</span>
                             <span class="float-right text-success text-bold">{{ str_pad($compra->modulo_4, 2, "0", STR_PAD_LEFT) }}</span>
                         </li>
                         @endif
@@ -111,13 +111,13 @@
 						@if($cantidad != null)
                         <li class="nav-item nav-link">
                             <span class="text-bold text-muted">Rubros Adicionales</span>
-                            <span class="float-right text-success text-bold">{{ str_pad($cantidad, 2, "0", STR_PAD_LEFT) }}</span>
+                            <span class="float-right text-success">{{ str_pad($cantidad, 2, "0", STR_PAD_LEFT) }}</span>
                         </li>
                         @endif
                         @if($monto != null)
                         <li class="nav-item nav-link">
                             <span class="text-bold text-muted">Monto Adicional</span>
-                            <span class="float-right text-success text-bold">{{ number_format($monto, 2, ',', '.') }}</span>
+                            <span class="float-right text-success">{{ number_format($monto, 2, ',', '.') }}</span>
                         </li>
                         @endif
                         <li class="nav-item nav-link">
@@ -196,7 +196,7 @@
 
 
     </div>
-    @if(!$rubros->isEmpty() && config('app.arma_tu_combo'))
+    @if(!$rubros->isEmpty()/* && config('app.arma_tu_combo')*/)
         <div class="row justify-content-center">
 
         <div class="col-md-7">

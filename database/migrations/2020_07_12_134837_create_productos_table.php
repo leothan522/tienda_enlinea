@@ -15,10 +15,11 @@ class CreateProductosTable extends Migration
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
-            $table->enum('modalidad', ['pagina', 'llamada'])->default('llamada');
+            $table->enum('modalidad', ['pagina', 'llamada', 'modulo'])->default('llamada');
             $table->string('nombre')->unique();
             $table->decimal('precio', 12,2)->nullable()->unsigned();
             $table->enum('band', ['activo', 'inactivo'])->default('activo');
+            $table->integer('rubros')->unsigned()->nullable();
             $table->timestamps();
         });
     }

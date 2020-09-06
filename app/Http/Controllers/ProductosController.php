@@ -16,7 +16,8 @@ class ProductosController extends Controller
      */
     public function index(Request $request)
     {
-        $productos = Producto::buscar($request->buscar)->orderBy('nombre', 'ASC')->paginate(25);
+        $productos = Producto::buscar($request->buscar)->where('modalidad', '<>', 'modulo')->orderBy('nombre', 'ASC')->paginate(25);
+        $modulos = Producto::where('modalidad', '=', 'modulo')->orderBy('nombre', 'ASC')->get();
         $total = Producto::all()->count();
 
         if($request->buscar){
@@ -25,6 +26,7 @@ class ProductosController extends Controller
         }
         return view('admin.productos.index')
             ->with('productos', $productos)
+            ->with('modulos', $modulos)
             ->with('total', $total);
     }
 
@@ -46,6 +48,7 @@ class ProductosController extends Controller
      */
     public function store(ProductosRequest $request)
     {
+        //dd($request->all());
         $producto = new Producto($request->all());
         $producto->nombre = strtoupper($request->nombre);
         $producto->save();
@@ -125,5 +128,17 @@ class ProductosController extends Controller
             flash('<a href="#"><strong><i class="fas fa-tag"></i> '.$nombre.'</strong></a> <em>Eliminado Exitosamente</em>', 'danger')->important();
             return redirect()->route('productos.index');
         }
+    }
+
+    public function create_mod()
+    {
+        return view('admin.productos.create_mod');
+    }
+
+    public function edit_mod($id)
+    {
+        $producto = Producto::find($id);
+        return view('admin.productos.edit_mod')
+            ->with('producto', $producto);
     }
 }

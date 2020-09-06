@@ -24,15 +24,15 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                    <li class="nav-item">
+                    {{--<li class="nav-item">
                         <a href="{{ route('productos.index') }}" class="nav-link @yield('productos')">
                             <i class="nav-icon fas fa-tag text-primary"></i>
                             <p class="text-primary">
                                 Productos
-                                {{--<span class="right badge badge-danger">08</span>--}}
+                                --}}{{--<span class="right badge badge-danger">08</span>--}}{{--
                             </p>
                         </a>
-                    </li>
+                    </li>--}}
                     <li class="nav-item">
                         <a href="{{ route('usuarios.index') }}" class="nav-link @yield('usuarios')">
                             <i class="nav-icon fas fa-users text-primary"></i>
@@ -80,6 +80,15 @@
                     <i class="nav-icon fas fa-users text-maroon"></i>
                     <p class="text-maroon">
                         Clientes
+                        {{--<span class="right badge badge-danger">08</span>--}}
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('productos.index') }}" class="nav-link @yield('productos')">
+                    <i class="nav-icon fas fa-tag text-indigo"></i>
+                    <p class="text-indigo">
+                        Productos
                         {{--<span class="right badge badge-danger">08</span>--}}
                     </p>
                 </a>

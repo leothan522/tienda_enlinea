@@ -22,7 +22,8 @@
                             <h3 class="card-title">Datos Personales</h3>
 
                             <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                        data-toggle="tooltip" title="Collapse">
                                     <i class="fas fa-minus"></i></button>
                             </div>
                         </div>
@@ -57,13 +58,14 @@
                     </div>
                     <!-- /.card -->
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Datos del Pedido</h3>
 
                             <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                        data-toggle="tooltip" title="Collapse">
                                     <i class="fas fa-minus"></i></button>
                             </div>
                         </div>
@@ -103,49 +105,77 @@
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
-					@if(config('app.adicionales'))
-					<div class="card card-primary collapsed-card">
-                        <div class="card-header">
-                            <h3 class="card-title">Adicionales</h3>
+                    @if(config('app.adicionales'))
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Adicionales</h3>
 
-                            <div class="card-tools">
-							  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
-							  </button>
-							</div>
-                        </div>
-                        <div class="card-body">
-                            <div class="input-group">
-                                <label class="col-md-12">Cant. de Rubros</label>
-                                {!! Form::number('rubros', $cantidad, ['class' => 'form-control', 'placeholder' => 'Numero',
-                                                    'min' => 1, 'pattern' => "^[0-9]+"]) !!}
+                                <div class="card-tools">
+                                    <button type="button"
+                                            class="btn btn-tool add_button2" {{--data-card-widget="collapse"--}}><i
+                                            class="fas fa-plus"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <br>
-                            <div class="input-group">
-                                <label class="col-md-12">Monto Total</label>
-                                {!! Form::number('monto', $monto, ['class' => 'form-control', 'placeholder' => 'Cantidad',
-                                                    'min' => 1, 'pattern' => "^[0-9]+", 'step' => 'any']) !!}
+                            <div class="card-body">
+                                {{--<div class="input-group">
+                                    <label class="col-md-12">Cant. de Rubros</label>
+                                    {!! Form::number('rubros', null, ['class' => 'form-control', 'placeholder' => 'Numero',
+                                                        'min' => 1, 'pattern' => "^[0-9]+"]) !!}
+                                </div>
+                                <br>
+                                <div class="input-group">
+                                    <label class="col-md-12">Monto Total</label>
+                                    {!! Form::number('monto', null, ['class' => 'form-control', 'placeholder' => 'Cantidad',
+                                                        'min' => 1, 'pattern' => "^[0-9]+", 'step' => 'any']) !!}
+                                </div>
+    --}}
+
+                                <div class="input-group">
+                                    {{--<label class="col-md-12">Rubros</label>--}}
+                                    <div class="field_wrapper2">
+                                        @if($compra->modulo_1 != null || $compra->modulo_2 != null)
+                                            @php($i = 0)
+                                            @foreach($rubros as $rubro)
+                                                @php($i++)
+                                                <div class="input-group justify-content-center">
+                                                    @if ($rubro->productos->rubros == null)
+                                                        {!! Form::select('adicionales[]', $productos, $rubro->productos_id,
+                                                                    ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione']) !!}
+                                                        <span class="col-md-1"></span>
+                                                        {!! Form::number('cant_adicionales[]', $rubro->cantidad, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
+                                                                        'min' => 1, 'pattern' => "^[0-9]+"]) !!}
+                                                        <a href="javascript:void(0);" class="remove_button2 text-danger"
+                                                           title="Remove field">
+                                                            <i class="far fa-trash-alt"></i></a>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+
+
                             </div>
-
-
+                            <!-- /.card-body -->
                         </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-					@endif
-				</div>
+                        <!-- /.card -->
+                    @endif
+                </div>
 
-					@if(config('app.arma_tu_combo'))
-				<div class="col-md-4">
-					<div class="card card-primary">
-                        <div class="card-header">
-                            <h3 class="card-title">Arma tu combo</h3>
+                @if(config('app.arma_tu_combo'))
+                    <div class="col-md-4">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Arma tu combo</h3>
 
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                                    <i class="fas fa-minus"></i></button>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                            data-toggle="tooltip" title="Collapse">
+                                        <i class="fas fa-minus"></i></button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body">
+                            <div class="card-body">
                                 {{--<div class="input-group">
                                     <label class="col-md-12">Cant.</label>
                                     {!! Form::number('modulo_3', $compra->modulo_3, ['class' => 'form-control', 'placeholder' => 'Cantidad',
@@ -162,65 +192,69 @@
                                     {!! Form::number('capture', $compra->capture, ['class' => 'form-control', 'placeholder' => 'Cantidad',
                                                     'min' => 1, 'pattern' => "^[0-9]+", 'step' => 'any']) !!}
                                 </div>--}}
-                            <div class="col-lg-12">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
+                                <div class="col-lg-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
                                         <span class="input-group-text">
                                             Cantidad Arma tu combo
                                         </span>
-                                    </div>
-                                    {!! Form::number('modulo_3', $compra->modulo_3, ['class' => 'form-control', 'placeholder' => 'Cant.',
-                                                    'min' => 1, 'pattern' => "^[0-9]+"]) !!}
-                                </div>
-                                <!-- /input-group -->
-                            </div>
-                            <br>
-                            <div class="input-group">
-                                <label class="col-md-12">Rubros</label>
-                                <div class="field_wrapper">
-                                    @php($i = 0)
-                                @foreach($rubros as $rubro)
-                                    @php($i++)
-                                    <div class="input-group justify-content-center">
-
-                                        {!! Form::select('productos[]', $productos, $rubro->productos_id,
-                                                    ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione']) !!}
-                                        <span class="col-md-1"></span>
-                                        {!! Form::number('cant[]', $rubro->cantidad, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
+                                        </div>
+                                        {!! Form::number('modulo_3', $compra->modulo_3, ['class' => 'form-control', 'placeholder' => 'Cant.',
                                                         'min' => 1, 'pattern' => "^[0-9]+"]) !!}
-                                        @if($i <= 1)
-                                        <a href="javascript:void(0);" class="add_button" title="Add field"><i class="fas fa-plus"></i></a>
-                                        <a href="javascript:void(0);" class="add_button" title="Add field"></a>
-                                            @else
-                                        <a href="javascript:void(0);" class="remove_button text-danger" title="Remove field">
-                                            <i class="far fa-trash-alt"></i></a>
+                                    </div>
+                                    <!-- /input-group -->
+                                </div>
+                                <br>
+                                <div class="input-group">
+                                    <label class="col-md-12">Rubros</label>
+                                    <div class="field_wrapper">
+                                        @if($compra->modulo_3 == null)
+                                            <div class="input-group justify-content-center">
+
+                                                {!! Form::select('productos[]', $productos, null,
+                                                            ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione']) !!}
+                                                <span class="col-md-1"></span>
+                                                {!! Form::number('cant[]', null, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
+                                                                'min' => 1, 'max' => 2, 'pattern' => "^[0-9]+"]) !!}
+                                                <a href="javascript:void(0);" class="add_button" title="Add field"><i
+                                                        class="fas fa-plus"></i></a>
+                                                <a href="javascript:void(0);" class="add_button" title="Add field"></a>
+
+                                            </div>
+                                        @else
+                                            @php($i = 0)
+                                            @foreach($rubros as $rubro)
+                                                @php($i++)
+                                                <div class="input-group justify-content-center">
+
+                                                    {!! Form::select('productos[]', $productos, $rubro->productos_id,
+                                                                ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione']) !!}
+                                                    <span class="col-md-1"></span>
+                                                    {!! Form::number('cant[]', $rubro->cantidad, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
+                                                                    'min' => 1, 'pattern' => "^[0-9]+"]) !!}
+                                                    @if($i <= 1)
+                                                        <a href="javascript:void(0);" class="add_button"
+                                                           title="Add field"><i class="fas fa-plus"></i></a>
+                                                        <a href="javascript:void(0);" class="add_button"
+                                                           title="Add field"></a>
+                                                    @else
+                                                        <a href="javascript:void(0);" class="remove_button text-danger"
+                                                           title="Remove field">
+                                                            <i class="far fa-trash-alt"></i></a>
+                                                    @endif
+                                                </div>
+                                            @endforeach
                                         @endif
                                     </div>
-                                @endforeach
-                                    @if($compra->modulo_3 == null)
-                                        <div class="input-group justify-content-center">
-
-                                            {!! Form::select('productos[]', $productos, null,
-                                                        ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione']) !!}
-                                            <span class="col-md-1"></span>
-                                            {!! Form::number('cant[]', null, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
-                                                            'min' => 1, 'max' => 2, 'pattern' => "^[0-9]+"]) !!}
-                                            <a href="javascript:void(0);" class="add_button" title="Add field"><i class="fas fa-plus"></i></a>
-                                            <a href="javascript:void(0);" class="add_button" title="Add field"></a>
-
-                                        </div>
-                                    @endif
                                 </div>
+
+
                             </div>
-
-
+                            <!-- /.card-body -->
                         </div>
-                        <!-- /.card-body -->
+                        <!-- /.card -->
                     </div>
-                    <!-- /.card -->
-				</div>
-					@endif
-
+                @endif
 
 
             </div>
@@ -240,8 +274,6 @@
             {!! Form::close() !!}
 
 
-
-
         </div>
     </div>
 @endsection
@@ -249,22 +281,27 @@
 @section('script')
     <script>
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             var maxField = 10; //Input fields increment limitation
             var addButton = $('.add_button'); //Add button selector
             var wrapper = $('.field_wrapper'); //Input field wrapper
             var fieldHTML = '<div class="input-group justify-content-center">' +
-                '<?php echo (Form::select('productos[]', $productos, null,
-				    ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione', 'required']))?>' +
+                '<?php echo( Form::select( 'productos[]', $productos, null,
+					[ 'class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione', 'required' ] ) )?>' +
                 '<span class="col-md-1"></span>' +
-                '<?php echo(Form::number('cant[]', null, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
-			                                              'min' => 1, 'pattern' => "^[0-9]+", 'required'])) ?>' +
+                '<?php echo( Form::number( 'cant[]', null, [
+					'class' => 'form-control col-md-2',
+					'placeholder' => 'Cant.',
+					'min'         => 1,
+					'pattern'     => "^[0-9]+",
+					'required'
+				] ) ) ?>' +
                 '<a href="javascript:void(0);" class="remove_button text-danger" title="Remove field">' +
                 '               <i class="far fa-trash-alt"></i></a>' +
                 '           </div>'; //New input field html
             var x = 1; //Initial field counter is 1
-            $(addButton).click(function(){ //Once add button is clicked
-                if(x < maxField){ //Check maximum number of input fields
+            $(addButton).click(function () { //Once add button is clicked
+                if (x < maxField) { //Check maximum number of input fields
                     x++; //Increment field counter
                     $(wrapper).append(fieldHTML); // Add field html
                     $(".chosen-categoria").chosen({
@@ -272,7 +309,42 @@
                     });
                 }
             });
-            $(wrapper).on('click', '.remove_button', function(e){ //Once remove button is clicked
+            $(wrapper).on('click', '.remove_button', function (e) { //Once remove button is clicked
+                e.preventDefault();
+                $(this).parent('div').remove(); //Remove field html
+                x--; //Decrement field counter
+            });
+        });
+
+        $(document).ready(function () {
+            var maxField = 10; //Input fields increment limitation
+            var addButton = $('.add_button2'); //Add button selector
+            var wrapper = $('.field_wrapper2'); //Input field wrapper
+            var fieldHTML = '<div class="input-group justify-content-center">' +
+                '<?php echo( Form::select( 'adicionales[]', $productos, null,
+					[ 'class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione', 'required' ] ) )?>' +
+                '<span class="col-md-1"></span>' +
+                '<?php echo( Form::number( 'cant_adicionales[]', null, [
+					'class' => 'form-control col-md-2',
+					'placeholder' => 'Cant.',
+					'min'         => 1,
+					'pattern'     => "^[0-9]+",
+					'required'
+				] ) ) ?>' +
+                '<a href="javascript:void(0);" class="remove_button2 text-danger" title="Remove field">' +
+                '               <i class="far fa-trash-alt"></i></a>' +
+                '           </div>'; //New input field html
+            var x = 1; //Initial field counter is 1
+            $(addButton).click(function () { //Once add button is clicked
+                if (x < maxField) { //Check maximum number of input fields
+                    x++; //Increment field counter
+                    $(wrapper).append(fieldHTML); // Add field html
+                    $(".chosen-categoria").chosen({
+                        no_results_text: "Sin Resultados para "
+                    });
+                }
+            });
+            $(wrapper).on('click', '.remove_button2', function (e) { //Once remove button is clicked
                 e.preventDefault();
                 $(this).parent('div').remove(); //Remove field html
                 x--; //Decrement field counter
@@ -282,8 +354,6 @@
         $(".chosen-categoria").chosen({
             no_results_text: "Sin Resultados para "
         });
-
-
 
 
         $('[data-mask]').inputmask()

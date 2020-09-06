@@ -80,7 +80,77 @@
 @section('content')
 
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-4">
+
+
+            <div class="card">
+                <div class="card-header bg-indigo border-0">
+                    <h3 class="card-title">Modulos</h3>
+                    <div class="card-tools">
+                        {{--<a href="{{ route('excel.ventas') }}" class="btn btn-tool btn-sm">
+                            <i class="far fa-file-excel"></i>
+                            <i class="fas fa-download"></i>
+                        </a>--}}
+                        {{--<a href="#" class="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-sm">
+                            <i class="fas fa-cart-plus"></i>
+                        </a>
+                        --}}
+                        <a href="{{ route('mod.create') }}" class="btn btn-tool btn-sm">
+                            <i class="fas fa-tag"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <table class="table table-hover table-valign-middle table-sm table-bordered table-responsive-sm">
+                            <thead class="thead-dark">
+                            <tr class="text-center">
+                                <th>Nombre</th>
+                                <th>Rubros</th>
+                                <th>Precio</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($modulos as $modulo)
+
+                                <tr class="text-center table-primary text-sm">
+                                    <td class="text-center">
+                                        <span class="text-bold">{{ ucwords($modulo->nombre) }}</span>
+                                    </td>
+                                    <td class="text-center text-bold">{{ str_pad($modulo->rubros, 2, "0", STR_PAD_LEFT) }}</td>
+                                    <td class="text-center text-bold">{{ number_format($modulo->precio, 2, ',', '.') }}</td>
+                                    <td style="width: 10px">
+                                        {!! Form::open(['route' => ['productos.destroy', $modulo->id], 'method' => 'DELETE']) !!}
+                                        <div class="btn-group">
+                                            {{--<a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-default btn-sm text-info" title="Ver">
+                                                <i class="fas fa-eye"></i></a>--}}
+                                            {{--<a href="{{ route('productos.show', $producto->id) }}" class="btn btn-default btn-sm" title="Ver">
+                                                <i class="fas fa-cog"></i></a>--}}
+                                            <a href="{{ route('mod.edit', $modulo->id) }}" class="btn btn-default btn-sm text-warning" title="Editar">
+                                                <i class="fas fa-pencil-alt"></i></a>
+                                            @if(auth()->user()->type == "Administrador")
+                                            <button type="submit" onclick="return confirm('Desea Eliminar al Rubro {{ $modulo->nombre }}')" class="btn btn-default btn-sm text-danger" title="Eliminar">
+                                                <i class="far fa-trash-alt"></i></button>
+                                            @endif
+                                        </div>
+                                        {!! Form::close() !!}
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row text-sm justify-content-end">
+                        {!! $productos->render() !!}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-md-6 offset-1">
 
 
             <div class="card">
@@ -95,7 +165,7 @@
                             <i class="fas fa-cart-plus"></i>
                         </a>
                         --}}
-                        <a href="{{ route('clientes.create') }}" class="btn btn-tool btn-sm">
+                        <a href="{{ route('productos.create') }}" class="btn btn-tool btn-sm">
                             <i class="fas fa-tag"></i>
                         </a>
                     </div>
@@ -125,14 +195,14 @@
                                     <td class="text-center">
 										@if($producto->band == "activo")
 												<span class="badge badge-success">
-													{{ ucwords($producto->band) }}	
+													{{ ucwords($producto->band) }}
 												</span>
 											@else
 												<span class="badge badge-danger">
-												{{ ucwords($producto->band) }}	
+												{{ ucwords($producto->band) }}
 												</span>
 										@endif
-										
+
 									</td>
                                     <td style="width: 10px">
                                         {!! Form::open(['route' => ['productos.destroy', $producto->id], 'method' => 'DELETE']) !!}
@@ -148,11 +218,13 @@
 													<a href="{{ route('productos.show', $producto->id) }}" class="btn btn-default btn-sm text-success" title="Activar">
 													<i class="fas fa-check"></i></a>
 											@endif
-                                            
+
                                             <a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-default btn-sm text-warning" title="Editar">
                                                 <i class="fas fa-pencil-alt"></i></a>
+                                            @if(auth()->user()->type == "Administrador")
                                             <button type="submit" onclick="return confirm('Desea Eliminar al Rubro {{ $producto->nombre }}')" class="btn btn-default btn-sm text-danger" title="Eliminar">
                                                 <i class="far fa-trash-alt"></i></button>
+                                            @endif
                                         </div>
                                         {!! Form::close() !!}
                                     </td>

@@ -1,0 +1,77 @@
+@extends("layouts.admin.layout")
+@section('title', 'Productos | Nuevo')
+@section('productos', 'active')
+@section('container-title', 'Productos')
+
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('productos.index') }}">Productos Registrados</a></li>
+    <li class="breadcrumb-item active">Nuevo Modulo</li>
+@endsection
+
+@section('content')
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+
+            {!! Form::open(['route' => 'productos.store', 'method' => 'POST']) !!}
+
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="card card-success">
+                        <div class="card-header">
+                            <h3 class="card-title">Datos del Modulo</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                    <i class="fas fa-minus"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Nombre del Modulo</label>
+                                {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Nombre Completo',
+                                                'required']) !!}
+                            </div>
+                            <div class="form-group">
+                                <label>Precio de Venta</label>
+                                {!! Form::number('precio', null, ['class' => 'form-control', 'placeholder' => 'Cantidad',
+                                                    'min' => 1, 'pattern' => "^[0-9]+", 'step' => 'any', 'required']) !!}
+                            </div>
+                            <div class="form-group">
+                                <label for="type">Cant. de Rubros</label>
+                                {!! Form::number('rubros', null, ['class' => 'form-control', 'placeholder' => 'Cantidad',
+                                                    'min' => 1, 'pattern' => "^[0-9]+", 'step' => 'any', 'required']) !!}
+                                <input type="hidden" name="modalidad" value="modulo">
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <a href="{{ route('productos.index') }}" class="btn btn-secondary">Cancelar</a>
+                    <input type="submit" value="Guardar" class="btn btn-success float-right">
+                </div>
+            </div>
+            <br>
+
+            {!! Form::close() !!}
+
+
+
+
+        </div>
+    </div>
+@endsection
+
+@section('script')
+    <script>
+        $('[data-mask]').inputmask()
+    </script>
+@endsection
+
+

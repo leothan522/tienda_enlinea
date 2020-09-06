@@ -15,12 +15,17 @@ class BuscarController extends Controller
 {
     public function cedula(Request $request)
     {
+        if ($request->buscar == null){
+            flash('No puedes dejar el campo <strong>Cedula</strong> vacio', 'danger')->important();
+            return redirect()->route('home');
+        }
+        $carbon = new Carbon();
         $busqueda = Datos_personal::where('cedula', '=', $request->buscar)->first();
 
         if($busqueda)
         {
             //dd($busqueda->id);
-            $carbon = new Carbon();
+
             $compras = Compra::where('datos_id', '=', $busqueda->id)->orderBy('id', 'DESC')->paginate(10);
             /*$compras->each(function ($compra){
                 $compra->datos;
@@ -40,6 +45,27 @@ class BuscarController extends Controller
                 ->with('datos', $busqueda);
 
         }else{
+
+            $explode = explode('-', $request->buscar);
+            $numero = str_pad((int)$explode[1], 8, "0", STR_PAD_LEFT);
+            $cedula = $explode[0].'-'.$numero;
+            $request->buscar = $cedula;
+
+            $busqueda = Datos_personal::where('cedula', '=', $request->buscar)->first();
+
+            if($busqueda)
+            {
+                $compras = Compra::where('datos_id', '=', $busqueda->id)->orderBy('id', 'DESC')->paginate(10);
+                $ventas = Venta::where('datos_id', '=', $busqueda->id)->orderBy('id', 'DESC')->paginate(10);
+                flash('<em>Resultados para la Cedula</em> <strong><a href="#"><i class="fas fa-search"></i> 
+                '.$request->buscar.' </strong></a>', 'primary')->important();
+                return view('admin.buscar.index')
+                    ->with('carbon', $carbon)
+                    ->with('compras', $compras)
+                    ->with('ventas', $ventas)
+                    ->with('datos', $busqueda);
+            }
+
             flash('<em>Sin Resultados para la Cedula</em> <strong><a href="#"><i class="fas fa-search"></i> 
                 '.$request->buscar.' </strong></a>', 'warning')->important();
             return redirect()->route('pedidos.index');
@@ -48,6 +74,10 @@ class BuscarController extends Controller
 
     public function referencia(Request $request)
     {
+        if ($request->buscar == null){
+            flash('No puedes dejar el campo <strong>Referencia</strong> vacio', 'danger')->important();
+            return redirect()->route('pedidos.index');
+        }
         $carrito = null;
         $total = null;
         $busqueda = Compra::where('referencia', '=', $request->buscar)->first();
@@ -92,6 +122,10 @@ class BuscarController extends Controller
 
     public function factura(Request $request)
     {
+        if ($request->buscar == null){
+            flash('No puedes dejar el campo <strong>Facturas</strong> vacio', 'danger')->important();
+            return redirect()->route('pedidos.index');
+        }
         $carrito = null;
         $total = null;
         $busqueda = Compra::where('factura', '=', $request->buscar)->first();
@@ -137,6 +171,10 @@ class BuscarController extends Controller
 
     public function cedula_ventas(Request $request)
     {
+        if ($request->buscar == null){
+            flash('No puedes dejar el campo <strong>Cedula</strong> vacio', 'danger')->important();
+            return redirect()->route('ventas.index');
+        }
         $busqueda = Datos_personal::where('cedula', '=', $request->buscar)->first();
 
         if($busqueda)
@@ -163,6 +201,10 @@ class BuscarController extends Controller
 
     public function referencia_ventas(Request $request)
     {
+        if ($request->buscar == null){
+            flash('No puedes dejar el campo <strong>Referencia</strong> vacio', 'danger')->important();
+            return redirect()->route('ventas.index');
+        }
         $busqueda = Venta::where('referencia', '=', $request->buscar)->first();
         if($busqueda)
         {
@@ -206,6 +248,10 @@ class BuscarController extends Controller
 
     public function factura_ventas(Request $request)
     {
+        if ($request->buscar == null){
+            flash('No puedes dejar el campo <strong>Factura</strong> vacio', 'danger')->important();
+            return redirect()->route('ventas.index');
+        }
         $busqueda = Venta::where('factura', '=', $request->buscar)->first();
         if($busqueda)
         {
