@@ -224,25 +224,28 @@
                                         @else
                                             @php($i = 0)
                                             @foreach($rubros as $rubro)
+                                                @if ($rubro->productos->rubros == null)
                                                 @php($i++)
                                                 <div class="input-group justify-content-center">
 
-                                                    {!! Form::select('productos[]', $productos, $rubro->productos_id,
-                                                                ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione']) !!}
-                                                    <span class="col-md-1"></span>
-                                                    {!! Form::number('cant[]', $rubro->cantidad, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
-                                                                    'min' => 1, 'pattern' => "^[0-9]+"]) !!}
-                                                    @if($i <= 1)
-                                                        <a href="javascript:void(0);" class="add_button"
-                                                           title="Add field"><i class="fas fa-plus"></i></a>
-                                                        <a href="javascript:void(0);" class="add_button"
-                                                           title="Add field"></a>
-                                                    @else
-                                                        <a href="javascript:void(0);" class="remove_button text-danger"
-                                                           title="Remove field">
-                                                            <i class="far fa-trash-alt"></i></a>
-                                                    @endif
+                                                        {!! Form::select('productos[]', $productos, $rubro->productos_id,
+                                                                    ['class' => 'form-control chosen-categoria', 'placeholder' => 'Seleccione']) !!}
+                                                        <span class="col-md-1"></span>
+                                                        {!! Form::number('cant[]', $rubro->cantidad, ['class' => 'form-control col-md-2', 'placeholder' => 'Cant.',
+                                                                        'min' => 1, 'pattern' => "^[0-9]+"]) !!}
+                                                        @if($i <= 1)
+                                                            <a href="javascript:void(0);" class="add_button"
+                                                               title="Add field"><i class="fas fa-plus"></i></a>
+                                                            <a href="javascript:void(0);" class="add_button"
+                                                               title="Add field"></a>
+                                                        @else
+                                                            <a href="javascript:void(0);" class="remove_button text-danger"
+                                                               title="Remove field">
+                                                                <i class="far fa-trash-alt"></i></a>
+                                                        @endif
+
                                                 </div>
+                                                @endif
                                             @endforeach
                                         @endif
                                     </div>

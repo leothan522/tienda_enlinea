@@ -28,9 +28,9 @@
                 <div class="card-header bg-indigo border-0">
                     <h3 class="card-title">Usuarios Registrados</h3>
                     <div class="card-tools">
-                        <a href="#" class="btn btn-tool btn-sm">
+                        {{--<a href="#" class="btn btn-tool btn-sm">
                             <i class="fas fa-download"></i>
-                        </a>
+                        </a>--}}
                         <a href="{{ route('usuarios.create') }}" class="btn btn-tool btn-sm">
                             <i class="fas fa-user-plus"></i>
                         </a>
