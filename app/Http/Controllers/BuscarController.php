@@ -321,7 +321,8 @@ class BuscarController extends Controller
                 '.$carbon->parse($request->buscar)->format('d-m-Y').' </strong>', 'primary')->important();
             return view('admin.buscar.compras')
                 ->with('carbon', $carbon)
-                ->with('compras', $busqueda);
+                ->with('compras', $busqueda)
+                ->with('fecha', $request->buscar);
         }else{
             flash('<em>Sin Resultados para la Fecha</em> <strong><i class="fas fa-search"></i> 
                 '.$carbon->parse($request->buscar)->format('d-m-Y').' </strong>', 'warning')->important();
@@ -340,7 +341,8 @@ class BuscarController extends Controller
                 '.$carbon->parse($fecha)->format('d-m-Y').' </strong></a>', 'info')->important();*/
             return view('admin.buscar.compras')
                 ->with('carbon', $carbon)
-                ->with('compras', $busqueda);
+                ->with('compras', $busqueda)
+                ->with('fecha', $fecha);
         }else{
             flash('<em>Sin Resultados para la Fecha</em> <strong><a href="#"><i class="fas fa-search"></i> 
                 '.$request->buscar.' </strong></a>', 'warning')->important();
@@ -359,7 +361,8 @@ class BuscarController extends Controller
                 '.$carbon->parse($request->buscar)->format('d-m-Y').' </strong>', 'primary')->important();
             return view('admin.buscar.ventas')
                 ->with('carbon', $carbon)
-                ->with('compras', $busqueda);
+                ->with('compras', $busqueda)
+                ->with('fecha', $request->buscar);
         }else{
             flash('<em>Sin Resultados para la Fecha</em> <strong><i class="fas fa-search"></i> 
                 '.$carbon->parse($request->buscar)->format('d-m-Y').' </strong>', 'danger')->important();
@@ -378,7 +381,8 @@ class BuscarController extends Controller
                 '.$carbon->parse($fecha)->format('d-m-Y').' </strong></a>', 'info')->important();*/
             return view('admin.buscar.ventas')
                 ->with('carbon', $carbon)
-                ->with('compras', $busqueda);
+                ->with('compras', $busqueda)
+                ->with('fecha', $fecha);
         }else{
             flash('<em>Sin Resultados para la Fecha</em> <strong><a href="#"><i class="fas fa-search"></i> 
                 '.$request->buscar.' </strong></a>', 'warning')->important();

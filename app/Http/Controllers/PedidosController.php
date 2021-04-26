@@ -190,7 +190,13 @@ class PedidosController extends Controller
                 $carrito->save();
             }
 
-            $bolsa = config('app.bolsa');
+            $bolsas = Producto::where('modalidad', '=', 'bolsa')->orderBy('nombre', 'ASC')->first();
+            if ($bolsas){
+                $bolsa = $bolsas->precio;
+            }else{
+                $bolsa = config('app.bolsa');
+            }
+
             $combo = $request->modulo_3;
             $total = ($combo * $monto) + $bolsa;
 
@@ -200,7 +206,7 @@ class PedidosController extends Controller
             $pedido->update();
         }
 
-        flash('<em>Pedido Guardado para </em> <strong><a href="'.route('pedidos.show', $pedido->id).'"><i class="fas fa-user"></i> 
+        flash('<em>Pedido Guardado para </em> <strong><a href="'.route('pedidos.show', $pedido->id).'"><i class="fas fa-user"></i>
                 '.$datos->nombre_completo.' </strong></a>', 'success')->important();
         return redirect()->route('pedidos.index');
     }
@@ -443,7 +449,12 @@ class PedidosController extends Controller
                     $carrito->save();
                 }
 
-                $bolsa = config( 'app.bolsa' );
+                $bolsas = Producto::where('modalidad', '=', 'bolsa')->orderBy('nombre', 'ASC')->first();
+                if ($bolsas){
+                    $bolsa = $bolsas->precio;
+                }else{
+                    $bolsa = config('app.bolsa');
+                }
                 $combo = $request->modulo_3;
                 $total = ( $combo * $monto ) + $bolsa;
 
@@ -454,7 +465,7 @@ class PedidosController extends Controller
             }
         }
 
-        flash('<em>Pedido Modificado para </em> <strong><a href="'.route('pedidos.show', $pedido->id).'"><i class="fas fa-user"></i> 
+        flash('<em>Pedido Modificado para </em> <strong><a href="'.route('pedidos.show', $pedido->id).'"><i class="fas fa-user"></i>
                 '.$datos->nombre_completo.' </strong></a>', 'primary')->important();
         return redirect()->route('pedidos.index');
     }
@@ -497,7 +508,7 @@ class PedidosController extends Controller
                 $compra = Compra::where('datos_id', '=', $datos2->id)->where('fecha', date('Y-m-d'))->first();
                 if ($compra){
                     flash('<em>Ya existe un pedido para </em><a href="'.route('pedidos.show', $compra->id).'">
-                            <strong><i class="fas fa-user"></i> 
+                            <strong><i class="fas fa-user"></i>
                             '.$datos2->nombre_completo.'</strong></a> de HOY', 'warning')->important();
                     return redirect()->route('pedidos.index');
                 }else{
@@ -528,7 +539,7 @@ class PedidosController extends Controller
 
             $compra = Compra::where('datos_id', '=', $datos->id)->where('fecha', date('Y-m-d'))->first();
             if ($compra){
-                flash('<em>Ya existe un pedido para </em><a href="'.route('pedidos.show', $compra->id).'"><strong><i class="fas fa-user"></i> 
+                flash('<em>Ya existe un pedido para </em><a href="'.route('pedidos.show', $compra->id).'"><strong><i class="fas fa-user"></i>
                 '.$datos->nombre_completo.'</strong></a> de HOY', 'warning')->important();
                 return redirect()->route('pedidos.index');
             }else{
@@ -674,7 +685,12 @@ class PedidosController extends Controller
                 $carrito->save();
             }
 
-            $bolsa = config('app.bolsa');
+            $bolsas = Producto::where('modalidad', '=', 'bolsa')->orderBy('nombre', 'ASC')->first();
+            if ($bolsas){
+                $bolsa = $bolsas->precio;
+            }else{
+                $bolsa = config('app.bolsa');
+            }
             $combo = $request->modulo_3;
             $total = ($combo * $monto) + $bolsa;
 
@@ -684,7 +700,7 @@ class PedidosController extends Controller
             $pedido->update();
         }
 
-        flash('<em>Pedido Guardado para </em> <strong><a href="'.route('pedidos.show', $pedido->id).'"><i class="fas fa-user"></i> 
+        flash('<em>Pedido Guardado para </em> <strong><a href="'.route('pedidos.show', $pedido->id).'"><i class="fas fa-user"></i>
                 '.$datos->nombre_completo.' </strong></a>', 'success')->important();
         return redirect()->route('pedidos.index');
     }
@@ -692,12 +708,21 @@ class PedidosController extends Controller
     public function update_pedido($id)
     {
         $pedido = Compra::find($id);
-        $pedido->estatus = 'Despachado';
+        //dd($pedido);
+        if ($pedido->estatus != "Despachado"){
+            $pedido->estatus = 'Despachado';
+            $mensaje = 'Despachada';
+            $level = 'success';
+        }else{
+            $pedido->estatus = 'Facturado';
+            $mensaje = 'NO se ha Despachado';
+            $level = 'primary';
+        }
         $pedido->responsable = strtoupper(auth()->user()->name);
         $pedido->update();
 
-        flash('<em>Despachada la Factura </em><strong><i class="far fa-file-alt"></i> 
-                '.$pedido->factura.' </strong>', 'success')->important();
+        flash('<em>'.$mensaje.' la Factura </em><strong><i class="far fa-file-alt"></i>
+                '.$pedido->factura.' </strong>', $level)->important();
         return redirect()->route('buscar.fecha.get', $pedido->fecha);
     }
 

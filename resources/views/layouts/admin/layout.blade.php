@@ -138,6 +138,11 @@
 
 <script src="{{ asset('chosen/chosen.jquery.js') }}" type="text/javascript"></script>
 <script src="{{ asset('lightcase/js/lightcase.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
 @yield('script')
 </body>
 </html>

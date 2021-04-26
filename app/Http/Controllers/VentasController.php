@@ -318,12 +318,20 @@ class VentasController extends Controller
     public function update_pedido($id)
     {
         $pedido = Venta::find($id);
-        $pedido->estatus = 'Despachado';
+        if ($pedido->estatus != "Despachado"){
+            $pedido->estatus = 'Despachado';
+            $mensaje = 'Despachada';
+            $level = 'success';
+        }else{
+            $pedido->estatus = 'Facturado';
+            $mensaje = 'NO se ha Despachado';
+            $level = 'primary';
+        }
         $pedido->responsable = strtoupper(auth()->user()->name);
         $pedido->update();
 
-        flash('<em>Despachada la Factura </em><strong><i class="far fa-file-alt"></i> 
-                '.$pedido->factura.' </strong>', 'success')->important();
+        flash('<em>'.$mensaje.' la Factura </em><strong><i class="far fa-file-alt"></i> 
+                '.$pedido->factura.' </strong>', $level)->important();
         return redirect()->route('ventas.buscar.fecha.get', $pedido->fecha);
     }
 

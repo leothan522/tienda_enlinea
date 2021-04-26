@@ -95,7 +95,7 @@
                             <i class="fas fa-cart-plus"></i>
                         </a>
                         --}}
-                        <a href="{{ route('mod.create') }}" class="btn btn-tool btn-sm">
+                        <a href="{{ route('mod.create') }}" class="btn btn-tool btn-sm" data-toggle="tooltip" data-placement="top" title="Agregar Modulo">
                             <i class="fas fa-tag"></i>
                         </a>
                     </div>
@@ -128,10 +128,10 @@
                                                 <i class="fas fa-eye"></i></a>--}}
                                             {{--<a href="{{ route('productos.show', $producto->id) }}" class="btn btn-default btn-sm" title="Ver">
                                                 <i class="fas fa-cog"></i></a>--}}
-                                            <a href="{{ route('mod.edit', $modulo->id) }}" class="btn btn-default btn-sm text-warning" title="Editar">
+                                            <a href="{{ route('mod.edit', $modulo->id) }}" class="btn btn-default btn-sm text-warning" title="Editar" data-toggle="tooltip" data-placement="top">
                                                 <i class="fas fa-pencil-alt"></i></a>
                                             @if(auth()->user()->type == "Administrador")
-                                            <button type="submit" onclick="return confirm('Desea Eliminar al Rubro {{ $modulo->nombre }}')" class="btn btn-default btn-sm text-danger" title="Eliminar">
+                                            <button type="submit" onclick="return confirm('Desea Eliminar al Rubro {{ $modulo->nombre }}')" class="btn btn-default btn-sm text-danger" title="Eliminar" data-toggle="tooltip" data-placement="top">
                                                 <i class="far fa-trash-alt"></i></button>
                                             @endif
                                         </div>
@@ -142,9 +142,143 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="row text-sm justify-content-end">
+                   {{-- <div class="row text-sm justify-content-end">
                         {!! $productos->render() !!}
+                    </div>--}}
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-indigo border-0">
+                    <h3 class="card-title">Otros</h3>
+                    <div class="card-tools">
+                        {{--<a href="{{ route('excel.ventas') }}" class="btn btn-tool btn-sm">
+                            <i class="far fa-file-excel"></i>
+                            <i class="fas fa-download"></i>
+                        </a>--}}
+                        {{--<a href="#" class="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-sm">
+                            <i class="fas fa-cart-plus"></i>
+                        </a>
+                        --}}
+                        {{--<a href="{{ route('mod.create') }}" class="btn btn-tool btn-sm" data-toggle="tooltip" data-placement="top" title="Agregar Modulo">
+                            <i class="fas fa-tag"></i>
+                        </a>--}}
                     </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <table class="table table-hover table-valign-middle table-sm table-bordered table-responsive-sm">
+                            <thead class="thead-dark">
+                            <tr class="text-center">
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+
+                                <tr class="table-primary text-sm">
+                                    <td class="text-center">
+                                        <span class="text-bold">Precio Bolsa Plastica</span>
+                                    </td>
+                                    <td class="text-center text-bold">{{ number_format($bolsas->precio, 2, ',', '.') }}</td>
+                                    <td style="width: 10px">
+
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default btn-sm text-warning" title="Editar" data-toggle="modal" data-target="#exampleModal">
+                                                <i class="fas fa-pencil-alt"></i></button>
+                                        </div>
+
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Editar Campo</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+
+                                                        @if (!$bolsas->id)
+
+                                                        {!! Form::open(['route' => 'productos.store', 'method' => 'POST']) !!}
+
+                                                        <div class="row justify-content-center">
+                                                            <div class="col-md-12">
+                                                                <div class="card card-success">
+                                                                    <div class="card-body">
+                                                                        <div class="form-group">
+                                                                            <label>Precio Bolsa Plastica</label>
+                                                                            <input type="hidden" name="nombre" value="{{ $bolsas->nombre }}">
+                                                                            <input type="hidden" name="modalidad" value="bolsa">
+                                                                            {!! Form::number('precio', $bolsas->precio, ['class' => 'form-control', 'placeholder' => 'Cantidad',
+                                                                                                'min' => 1, 'pattern' => "^[0-9]+", 'step' => 'any', 'required']) !!}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                                <input type="submit" value="Guardar" class="btn btn-success float-right">
+                                                            </div>
+                                                        </div>
+
+                                                        {!! Form::close() !!}
+
+                                                        @else
+
+                                                        {!! Form::open(['route' => ['productos.update', $bolsas->id], 'method' => 'PUT']) !!}
+
+                                                        <div class="row justify-content-center">
+                                                            <div class="col-md-12">
+                                                                <div class="card card-success">
+                                                                    <div class="card-body">
+                                                                        <div class="form-group">
+                                                                            <label>Precio Bolsa Plastica</label>
+                                                                            <input type="hidden" name="nombre" value="{{ $bolsas->nombre }}">
+                                                                            <input type="hidden" name="modalidad" value="bolsa">
+                                                                            {!! Form::number('precio', $bolsas->precio, ['class' => 'form-control', 'placeholder' => 'Cantidad',
+                                                                                                'min' => 1, 'pattern' => "^[0-9]+", 'step' => 'any', 'required']) !!}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                                <input type="submit" value="Guardar" class="btn btn-primary float-right">
+                                                            </div>
+                                                        </div>
+
+
+                                                        {!! Form::close() !!}
+
+                                                        @endif
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                   {{-- <div class="row text-sm justify-content-end">
+                        {!! $productos->render() !!}
+                    </div>--}}
                 </div>
             </div>
 
@@ -155,7 +289,7 @@
 
             <div class="card">
                 <div class="card-header bg-indigo border-0">
-                    <h3 class="card-title">Productos Registrados - <span class="text-bold">({{ $total }})</span></h3>
+                    <h3 class="card-title">Rubros - <span class="text-bold">({{ $total }})</span></h3>
                     <div class="card-tools">
                         {{--<a href="{{ route('excel.ventas') }}" class="btn btn-tool btn-sm">
                             <i class="far fa-file-excel"></i>
@@ -165,7 +299,7 @@
                             <i class="fas fa-cart-plus"></i>
                         </a>
                         --}}
-                        <a href="{{ route('productos.create') }}" class="btn btn-tool btn-sm">
+                        <a href="{{ route('productos.create') }}" class="btn btn-tool btn-sm" data-toggle="tooltip" data-placement="top" title="Agregar Producto">
                             <i class="fas fa-tag"></i>
                         </a>
                     </div>
@@ -212,17 +346,17 @@
                                             {{--<a href="{{ route('productos.show', $producto->id) }}" class="btn btn-default btn-sm" title="Ver">
                                                 <i class="fas fa-cog"></i></a>--}}
 											@if($producto->band == "activo")
-													<a href="{{ route('productos.show', $producto->id) }}" class="btn btn-default btn-sm text-fuchsia" title="Inactivar">
+													<a href="{{ route('productos.show', $producto->id) }}" class="btn btn-default btn-sm text-fuchsia" title="Inactivar" data-toggle="tooltip" data-placement="top">
 													<i class="fas fa-ban"></i></a>
 												@else
-													<a href="{{ route('productos.show', $producto->id) }}" class="btn btn-default btn-sm text-success" title="Activar">
+													<a href="{{ route('productos.show', $producto->id) }}" class="btn btn-default btn-sm text-success" title="Activar" data-toggle="tooltip" data-placement="top">
 													<i class="fas fa-check"></i></a>
 											@endif
 
-                                            <a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-default btn-sm text-warning" title="Editar">
+                                            <a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-default btn-sm text-warning" title="Editar" data-toggle="tooltip" data-placement="top">
                                                 <i class="fas fa-pencil-alt"></i></a>
                                             @if(auth()->user()->type == "Administrador")
-                                            <button type="submit" onclick="return confirm('Desea Eliminar al Rubro {{ $producto->nombre }}')" class="btn btn-default btn-sm text-danger" title="Eliminar">
+                                            <button type="submit" onclick="return confirm('Desea Eliminar al Rubro {{ $producto->nombre }}')" class="btn btn-default btn-sm text-danger" title="Eliminar" data-toggle="tooltip" data-placement="top">
                                                 <i class="far fa-trash-alt"></i></button>
                                             @endif
                                         </div>

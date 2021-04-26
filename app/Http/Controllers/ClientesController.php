@@ -64,7 +64,7 @@ class ClientesController extends Controller
         $datos->municipio = config('app.municipio');
         $datos->save();
 
-        flash('<em>Cliente guardado</em> <strong><a href="'.route('clientes.edit', $datos->id).'"><i class="fas fa-user"></i> 
+        flash('<em>Cliente guardado</em> <strong><a href="'.route('clientes.edit', $datos->id).'"><i class="fas fa-user"></i>
                 '.$datos->nombre_completo.' </strong></a>', 'success')->important();
         return redirect()->route('clientes.index');
 
@@ -126,7 +126,7 @@ class ClientesController extends Controller
         //$datos->municipio = config('app.municipio');
         $datos->update();
 
-        flash('<em>Cliente guardado</em> <strong><a href="'.route('clientes.edit', $datos->id).'"><i class="fas fa-user"></i> 
+        flash('<em>Cliente guardado</em> <strong><a href="'.route('clientes.edit', $datos->id).'"><i class="fas fa-user"></i>
                 '.$datos->nombre_completo.' </strong></a>', 'primary')->important();
         return redirect()->route('clientes.index');
     }
@@ -146,16 +146,29 @@ class ClientesController extends Controller
         $verificar  = $ventas + $pedidos;
 
         if ($verificar){
-            flash('<em>EL Cliente</em> <strong><a href="'.route('clientes.edit', $datos->id).'"><i class="fas fa-user"></i> 
+            flash('<em>EL Cliente</em> <strong><a href="'.route('clientes.edit', $datos->id).'"><i class="fas fa-user"></i>
                 '.$datos->nombre_completo.' </strong></a> <em> <br> <span class="text-bold">NO se puede borrar</span>
                       porque tiene pedidos vinculados</em>', 'warning')->important();
             return redirect()->route('clientes.index');
         }
 
         $datos->delete();
-        flash('<em>Eliminado el Cliente</em> <strong><a href="#"><i class="fas fa-user"></i> 
+        flash('<em>Eliminado el Cliente</em> <strong><a href="#"><i class="fas fa-user"></i>
                 '.$nombre.' </strong></a> <em>', 'danger')->important();
         return redirect()->route('clientes.index');
 
     }
+
+    public function buscar(Request $request)
+    {
+        if ($request->buscar){
+            flash('<em>Resultados para el Nombre <strong><a href="javascript:history.back()">'.strtoupper($request->buscar).'</a></strong>', 'warning')->important();
+        }
+        $clientes = Datos_personal::where("nombre_completo", "LIKE", "%$request->buscar%")->orderBy('created_at', 'DESC')->paginate(50);
+        $total = Datos_personal::count();
+        return view('admin.clientes.index')
+            ->with('compras', $clientes)
+            ->with('total', $total);
+    }
+
 }

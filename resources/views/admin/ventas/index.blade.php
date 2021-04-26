@@ -78,12 +78,12 @@
                 <div class="card-header bg-warning border-0">
                     <h3 class="card-title">Pedidos Realizados Hoy - <span class="text-bold">({{ $total }})</span></h3>
                     <div class="card-tools">
-                        <a href="{{ route('excel.ventas') }}" class="btn btn-tool btn-sm">
+                        <a href="{{ route('excel.ventas') }}" class="btn btn-tool btn-sm" data-toggle="tooltip" data-placement="top" title="Descargar Excel">
                             <i class="far fa-file-excel"></i>
                             <i class="fas fa-download"></i>
                         </a>
                             <a href="#" class="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-sm">
-                                <i class="fas fa-cart-plus"></i>
+                                <i class="fas fa-cart-plus" data-toggle="tooltip" data-placement="top" title="Agregar Pedido"></i>
                             </a>
                         {{--<a href="#" class="btn btn-tool btn-sm">
                             <i class="fas fa-cog"></i>
@@ -125,17 +125,17 @@
                                         <div class="btn-group">
                                             {{--<a href="{{ route('miembros.edit', $miembro->id) }}" class="btn btn-default btn-sm text-info" title="Ver">
                                                 <i class="fas fa-eye"></i></a>--}}
-                                            <a href="{{ route('ventas.show', $compra->id) }}" class="btn btn-default btn-sm" title="Ver">
+                                            <a href="{{ route('ventas.show', $compra->id) }}" class="btn btn-default btn-sm" title="Ver" data-toggle="tooltip" data-placement="top">
                                                 <i class="fas fa-cog"></i></a>
                                             @if($compra->referencia == null)
-                                            <a href="{{ route('ventas.edit', $compra->id) }}" class="btn btn-default btn-sm text-warning" title="Editar">
+                                            <a href="{{ route('ventas.edit', $compra->id) }}" class="btn btn-default btn-sm text-warning" title="Editar" data-toggle="tooltip" data-placement="top">
                                                 <i class="fas fa-pencil-alt"></i></a>
 
-                                            <button type="submit" onclick="return confirm('Desea Eliminar el Pedido de {{ $compra->datos->nombre_completo }}')" class="btn btn-default btn-sm text-danger" title="Eliminar">
+                                            <button type="submit" onclick="return confirm('Desea Eliminar el Pedido de {{ $compra->datos->nombre_completo }}')" class="btn btn-default btn-sm text-danger" title="Eliminar" data-toggle="tooltip" data-placement="top">
                                                 <i class="far fa-trash-alt"></i></button>
                                             @endif
                                             @if($compra->referencia != null && $compra->factura != null && $compra->estatus != "Despachado")
-                                                <a href="{{ route('ventas.despacho.update', $compra->id) }}" class="btn btn-default btn-sm text-success" title="Despachado" onclick="return confirm('Se Despacho la Factura: {{ $compra->factura }}')">
+                                                <a href="{{ route('ventas.despacho.update', $compra->id) }}" class="btn btn-default btn-sm text-success" title="Despachado" onclick="return confirm('Se Despacho la Factura: {{ $compra->factura }}')" data-toggle="tooltip" data-placement="top">
                                                     <i class="fas fa-truck"></i></a>
                                             @endif
                                         </div>

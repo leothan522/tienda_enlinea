@@ -82,6 +82,7 @@ Route::post('/import/web', 'ImportController@web')->name('import.web')->middlewa
 
 // rutas Clientes
 Route::resource('clientes', 'ClientesController')->middleware('auth');
+Route::post('/clientes/buscar/nombre', 'ClientesController@buscar')->name('clientes.buscar')->middleware('auth');
 
 // rutas CNE
 Route::get('/cne', 'CNEController@index')->name('cne.index');

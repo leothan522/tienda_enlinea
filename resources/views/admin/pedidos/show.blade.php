@@ -149,9 +149,14 @@
                 <div class="card-header">
                     <h3 class="card-title">Facturación</h3>
                     <div class="card-tools">
-                        @if($compra->referencia != null && $compra->factura != null && $compra->estatus != "Despachado")
-                            <a href="{{ route('despacho.update', $compra->id) }}" class="btn btn-tool btn-sm" title="Despachado" onclick="return confirm('Se Despacho la Factura: {{ $compra->factura }}')">
-                                <i class="fas fa-truck"></i></a>
+                        @if($compra->referencia != null && $compra->factura != null)
+                            @if ($compra->estatus != "Despachado")
+                                <a href="{{ route('despacho.update', $compra->id) }}" class="btn btn-tool btn-sm" title="Despachado" onclick="return confirm('Se Despacho la Factura: {{ $compra->factura }}')" data-toggle="tooltip" data-placement="top">
+                                    <i class="fas fa-truck"></i></a>
+                                @else
+                                <a href="{{ route('despacho.update', $compra->id) }}" class="btn btn-tool btn-sm" title="NO Despachado" onclick="return confirm('NO se ha Despachado la Factura: {{ $compra->factura }}')" data-toggle="tooltip" data-placement="top">
+                                    <i class="fas fa-truck-loading"></i></a>
+                            @endif
                         @endif
                     </div>
                 </div>

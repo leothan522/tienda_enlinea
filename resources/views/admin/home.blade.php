@@ -18,6 +18,17 @@
         </div>
     {!! Form::close() !!}
     <!-- SEARCH FORM -->
+    {!! Form::open(['route' => 'clientes.buscar', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
+    <div class="input-group input-group-sm">
+        <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Nombre" aria-label="Buscar" required>
+        <div class="input-group-append">
+            <button class="btn btn-navbar" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+    {!! Form::close() !!}
+    <!-- SEARCH FORM -->
     {!! Form::open(['route' => 'buscar.factura', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
         <div class="input-group input-group-sm">
             <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Factura" aria-label="Buscar" data-inputmask='"mask": "99999"' data-mask required>
@@ -134,38 +145,38 @@
                     <div class="card-body p-0">
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item text-center">
-                                <a href="{{ route('excel.ventas') }}" class="nav-link">
+                                <a href="{{ route('excel.ventas') }}" class="nav-link" data-toggle="tooltip" data-placement="left" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->format('d-M') }}
                                 </a>
                             </li>
                             <li class="nav-item text-center">
-                                <a href="{{ route('ventas.excel.sub01') }}" class="nav-link">
+                                <a href="{{ route('ventas.excel.sub01') }}" class="nav-link" data-toggle="tooltip" data-placement="left" title="Descargar Excel">
                                     {{--<span class="float-right text-xs text-primary">(2)</span>--}}
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->subDay(1)->format('d-M') }}
                                 </a>
                             </li>
                             <li class="nav-item text-center">
-                                <a href="{{ route('ventas.excel.sub02') }}" class="nav-link">
+                                <a href="{{ route('ventas.excel.sub02') }}" class="nav-link" data-toggle="tooltip" data-placement="left" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->subDay(2)->format('d-M') }}
                                 </a>
                             </li>
                             <li class="nav-item text-center">
-                                <a href="{{ route('ventas.excel.sub03') }}" class="nav-link">
+                                <a href="{{ route('ventas.excel.sub03') }}" class="nav-link" data-toggle="tooltip" data-placement="left" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->subDay(3)->format('d-M') }}
                                 </a>
                             </li>
                             <li class="nav-item text-center">
-                                <a href="{{ route('ventas.excel.sub04') }}" class="nav-link">
+                                <a href="{{ route('ventas.excel.sub04') }}" class="nav-link" data-toggle="tooltip" data-placement="left" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->subDay(4)->format('d-M') }}
                                 </a>
                             </li>
                             <li class="nav-item text-center">
-                                <a href="{{ route('ventas.excel.sub05') }}" class="nav-link">
+                                <a href="{{ route('ventas.excel.sub05') }}" class="nav-link" data-toggle="tooltip" data-placement="left" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->subDay(5)->format('d-M') }}
                                 </a>
                             </li>
                             <li class="nav-item text-center">
-                                <a href="{{ route('ventas.excel.sub06') }}" class="nav-link">
+                                <a href="{{ route('ventas.excel.sub06') }}" class="nav-link" data-toggle="tooltip" data-placement="left" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->subDay(6)->format('d-M') }}
                                 </a>
                             </li>
@@ -185,7 +196,7 @@
                                 <i class="fas fa-download"></i>
                             </a>--}}
                             <a href="#" class="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-sm">
-                                <i class="fas fa-cart-plus"></i>
+                                <i class="fas fa-cart-plus" data-toggle="tooltip" data-placement="top" title="Agregar Pedido"></i>
                             </a>
                             {{--<a href="#" class="btn btn-tool btn-sm">
                                 <i class="fas fa-cog"></i>
@@ -252,37 +263,37 @@
                     <div class="card-body p-0">
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item text-center">
-                                <a href="{{ route('excel.pedidos') }}" class="nav-link">
+                                <a href="{{ route('excel.pedidos') }}" class="nav-link" data-toggle="tooltip" data-placement="right" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->format('d-M') }}
                                 </a>
                             </li>
                             <li class="nav-item text-center">
-                                <a href="{{ route('excel.sub01') }}" class="nav-link">
+                                <a href="{{ route('excel.sub01') }}" class="nav-link" data-toggle="tooltip" data-placement="right" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->subDay(1)->format('d-M') }}
                                 </a>
                             </li>
                             <li class="nav-item text-center">
-                                <a href="{{ route('excel.sub02') }}" class="nav-link">
+                                <a href="{{ route('excel.sub02') }}" class="nav-link" data-toggle="tooltip" data-placement="right" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->subDay(2)->format('d-M') }}
                                 </a>
                             </li>
                             <li class="nav-item text-center">
-                                <a href="{{ route('excel.sub03') }}" class="nav-link">
+                                <a href="{{ route('excel.sub03') }}" class="nav-link" data-toggle="tooltip" data-placement="right" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->subDay(3)->format('d-M') }}
                                 </a>
                             </li>
                             <li class="nav-item text-center">
-                                <a href="{{ route('excel.sub04') }}" class="nav-link">
+                                <a href="{{ route('excel.sub04') }}" class="nav-link" data-toggle="tooltip" data-placement="right" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->subDay(4)->format('d-M') }}
                                 </a>
                             </li>
                             <li class="nav-item text-center">
-                                <a href="{{ route('excel.sub05') }}" class="nav-link">
+                                <a href="{{ route('excel.sub05') }}" class="nav-link" data-toggle="tooltip" data-placement="right" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->subDay(5)->format('d-M') }}
                                 </a>
                             </li>
                             <li class="nav-item text-center">
-                                <a href="{{ route('excel.sub06') }}" class="nav-link">
+                                <a href="{{ route('excel.sub06') }}" class="nav-link" data-toggle="tooltip" data-placement="right" title="Descargar Excel">
                                     <i class="far fa-file-excel"></i> <i class="fas fa-download"></i> {{ $carbon->parse(date('Y-m-d'))->subDay(6)->format('d-M') }}
                                 </a>
                             </li>

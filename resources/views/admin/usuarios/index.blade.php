@@ -31,7 +31,7 @@
                         {{--<a href="#" class="btn btn-tool btn-sm">
                             <i class="fas fa-download"></i>
                         </a>--}}
-                        <a href="{{ route('usuarios.create') }}" class="btn btn-tool btn-sm">
+                        <a href="{{ route('usuarios.create') }}" class="btn btn-tool btn-sm" data-toggle="tooltip" data-placement="top" title="Crear Usuario">
                             <i class="fas fa-user-plus"></i>
                         </a>
                         {{--<a href="#" class="btn btn-tool btn-sm">
@@ -75,11 +75,11 @@
                                 <div class="btn-group">
                                     {{--<a href="{{ route('usuarios.show', $usuario->id) }}" class="btn btn-default btn-sm text-info" title="Ver">
                                         <i class="fas fa-eye"></i></a>--}}
-                                    <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-default btn-sm text-warning" title="Editar">
+                                    <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-default btn-sm text-warning" title="Editar" data-toggle="tooltip" data-placement="top">
                                         <i class="fas fa-pencil-alt"></i></a>
                                     {{--<a href="#" class="btn btn-default btn-sm" title="Cambiar Tipo">
                                         <i class="fas fa-cog"></i></a>--}}
-                                    <button type="submit" onclick="return confirm('Desea Eliminar al Usuario {{ $usuario->name }}')" class="btn btn-default btn-sm text-danger" title="Eliminar">
+                                    <button type="submit" onclick="return confirm('Desea Eliminar al Usuario {{ $usuario->name }}')" class="btn btn-default btn-sm text-danger" title="Eliminar" data-toggle="tooltip" data-placement="top">
                                         <i class="far fa-trash-alt"></i></button>
                                 </div>
                                 {!! Form::close() !!}

@@ -17,17 +17,17 @@
             </div>
         </div>
     </form>
-    {{--<!-- SEARCH FORM -->
-    {!! Form::open(['route' => 'ventas.buscar.cedula', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
+    <!-- SEARCH FORM -->
+    {!! Form::open(['route' => 'clientes.buscar', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
     <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="text" name="buscar" placeholder="Buscar Cedula" aria-label="Buscar" data-inputmask='"mask": "A-99999999"' data-mask required>
+        <input class="form-control form-control-navbar" size="10%" type="text" name="buscar" placeholder="Nombre" aria-label="Buscar" required>
         <div class="input-group-append">
             <button class="btn btn-navbar" type="submit">
                 <i class="fas fa-search"></i>
             </button>
         </div>
     </div>
-    {!! Form::close() !!}--}}
+    {!! Form::close() !!}
    {{-- <!-- SEARCH FORM -->
     {!! Form::open(['route' => 'ventas.buscar.factura', 'method' => 'POST', 'role' => 'form', 'class' => 'form-inline ml-3']) !!}
     <div class="input-group input-group-sm">
@@ -96,7 +96,7 @@
                             <i class="fas fa-cart-plus"></i>
                         </a>
                         --}}
-                        <a href="{{ route('clientes.create') }}" class="btn btn-tool btn-sm">
+                        <a href="{{ route('clientes.create') }}" class="btn btn-tool btn-sm" data-toggle="tooltip" data-placement="top" title="Agregar Cliente">
                             <i class="fas fa-user-plus"></i>
                         </a>
                     </div>
@@ -125,19 +125,21 @@
                                     <td class="text-center"><span class="badge">{{ $compra->telefono }}</span></td>
                                     <td class="text-center small">{{ $compra->direccion }}</td>
                                     <td style="width: 10px">
-                                        {!! Form::open(['route' => ['clientes.destroy', $compra->id], 'method' => 'DELETE']) !!}
-                                        <div class="btn-group">
-                                            {{--<a href="{{ route('ventas.edit', $compra->id) }}" class="btn btn-default btn-sm text-info" title="Ver">
-                                                <i class="fas fa-eye"></i></a>--}}
-                                            {{--<a href="{{ route('ventas.show', $compra->id) }}" class="btn btn-default btn-sm" title="Ver">
-                                                <i class="fas fa-cog"></i></a>--}}
-                                            <a href="{{ route('clientes.edit', $compra->id) }}" class="btn btn-default btn-sm text-warning" title="Editar">
-                                                <i class="fas fa-pencil-alt"></i></a>
 
-                                            <button type="submit" onclick="return confirm('Desea Eliminar al Cliente {{ $compra->nombre_completo }}')" class="btn btn-default btn-sm text-danger" title="Eliminar">
+                                        <div class="btn-group">
+                                            {!! Form::open(['route' => 'buscar.cedula', 'method' => 'POST', 'role' => 'form']) !!}
+                                            <input type="hidden" name="buscar" value="{{ $compra->cedula }}">
+                                            <button type="submit" class="btn btn-default btn-sm" title="Ver Pedidos" data-toggle="tooltip" data-placement="top">
+                                                <i class="fas fa-cog"></i></button>
+                                            {!! Form::close() !!}
+                                            <a href="{{ route('clientes.edit', $compra->id) }}" class="btn btn-default btn-sm text-warning" title="Editar" data-toggle="tooltip" data-placement="top">
+                                                <i class="fas fa-pencil-alt"></i></a>
+                                            {!! Form::open(['route' => ['clientes.destroy', $compra->id], 'method' => 'DELETE']) !!}
+                                            <button type="submit" onclick="return confirm('Desea Eliminar al Cliente {{ $compra->nombre_completo }}')" class="btn btn-default btn-sm text-danger" title="Eliminar" data-toggle="tooltip" data-placement="top">
                                                 <i class="far fa-trash-alt"></i></button>
+                                            {!! Form::close() !!}
                                         </div>
-                                        {!! Form::close() !!}
+
                                     </td>
                                 </tr>
                             @endforeach

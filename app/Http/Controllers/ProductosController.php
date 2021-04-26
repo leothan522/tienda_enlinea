@@ -18,15 +18,27 @@ class ProductosController extends Controller
     {
         $productos = Producto::buscar($request->buscar)->where('modalidad', '<>', 'modulo')->orderBy('nombre', 'ASC')->paginate(25);
         $modulos = Producto::where('modalidad', '=', 'modulo')->orderBy('nombre', 'ASC')->get();
+        $bolsas = Producto::where('modalidad', '=', 'bolsa')->orderBy('nombre', 'ASC')->first();
         $total = Producto::all()->count();
 
         if($request->buscar){
-            flash('<em>Resultado de la Busqueda Para:</em> 
+            flash('<em>Resultado de la Busqueda Para:</em>
                     <a href="'.route('productos.index').'"><strong><i class="fas fa-tag"></i> '.strtoupper($request->buscar).'</strong></a>', 'primary')->important();
         }
+
+        if (!$bolsas){
+            $bolsas = (object) [
+                "id" => 0,
+                "nombre" => "Precio Bolsa Plastica",
+                "precio" => config('app.bolsa')
+                ];
+        }
+
+
         return view('admin.productos.index')
             ->with('productos', $productos)
             ->with('modulos', $modulos)
+            ->with('bolsas', $bolsas)
             ->with('total', $total);
     }
 
@@ -53,7 +65,11 @@ class ProductosController extends Controller
         $producto->nombre = strtoupper($request->nombre);
         $producto->save();
 
-        flash('<a href="'.route('productos.edit', $producto->id).'"><strong><i class="fas fa-tag"></i> '.$producto->nombre.'</strong></a> <em>Creado Exitosamente</em>', 'success')->important();
+        if ($request->modalidad == "bolsa"){
+            flash('<strong><i class="fas fa-tag"></i> '.$producto->nombre.'</strong> <em>Modificado Exitosamente</em>', 'success')->important();
+        }else{
+            flash('<a href="'.route('productos.edit', $producto->id).'"><strong><i class="fas fa-tag"></i> '.$producto->nombre.'</strong></a> <em>Creado Exitosamente</em>', 'success')->important();
+        }
         return redirect()->route('productos.index');
 
     }
@@ -107,7 +123,11 @@ class ProductosController extends Controller
         $producto->nombre = strtoupper($request->nombre);
         $producto->update();
 
-        flash('<a href="'.route('productos.edit', $producto->id).'"><strong><i class="fas fa-tag"></i> '.$producto->nombre.'</strong></a> <em>Editado Exitosamente</em>', 'primary')->important();
+        if ($request->modalidad == "bolsa"){
+            flash('<strong><i class="fas fa-tag"></i> '.$producto->nombre.'</strong> <em>Modificado Exitosamente</em>', 'primary')->important();
+        }else{
+            flash('<a href="'.route('productos.edit', $producto->id).'"><strong><i class="fas fa-tag"></i> '.$producto->nombre.'</strong></a> <em>Editado Exitosamente</em>', 'primary')->important();
+        }
         return redirect()->route('productos.index');
     }
 
